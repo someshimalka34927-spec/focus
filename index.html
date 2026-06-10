@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Premium Study Space - AL Science Squad</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
@@ -45,7 +42,7 @@
             z-index: 0;
         }
 
-        /* Logo Animation */
+        /* Logo Styling */
         .squad-logo {
             width: 100px;
             height: 100px;
@@ -56,7 +53,7 @@
             border: 2px solid #ffcc00;
         }
 
-        /* --- Simple Email Auth Screen --- */
+        /* --- Auth Screen --- */
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -152,7 +149,7 @@
             <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය..." style="margin-top: 6px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
-        <button class="main-action-btn" onclick="executeCloudLogin()">Sign In / Enter Space</button>
+        <button class="main-action-btn" onclick="executeFastLogin()">Sign In / Enter Space</button>
     </div>
 
 
@@ -218,32 +215,19 @@
     </div>
 
     <script>
-        // 🔴 ඔයාගේ FIREBASE CONFIG விස්තර ටික මෙතනට පේස්ට් කරන්න 🔴
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
         let countdown, isRunning = false, currentMode = 'focus'; 
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeEmail = "";
         let userData = { points: 0, sessions: 0, history: [] };
 
-        // Auto Login System
+        // Browser Auto Login Check
         window.onload = function() {
-            let savedUser = localStorage.getItem('squad_cloud_user');
+            let savedUser = localStorage.getItem('active_squad_user');
             if(savedUser) {
                 activeEmail = savedUser;
                 document.getElementById('userDisplayBadg').innerText = activeEmail;
-                loadDataFromCloud(activeEmail);
+                loadUserData();
+                showDashboard();
             } else {
                 showAuthScreen();
             }
@@ -252,63 +236,52 @@
         function checkEnterKey(event, type) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                if (type === 'auth') executeCloudLogin();
+                if (type === 'auth') executeFastLogin();
                 if (type === 'task') askAIForPlan();
             }
         }
 
-        // --- DIRECT EMAIL LOGIN ---
-        function executeCloudLogin() {
+        // --- FAST LOGIN WITHOUT CLOUD ERRORS ---
+        function executeFastLogin() {
             const email = document.getElementById('authEmail').value.trim().toLowerCase();
             if(!email || !email.includes('@')) {
                 return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
             }
 
             activeEmail = email;
-            localStorage.setItem('squad_cloud_user', activeEmail);
+            localStorage.setItem('active_squad_user', activeEmail);
             document.getElementById('userDisplayBadg').innerText = activeEmail;
             
-            let userDocRef = db.collection('cloud_users').doc(btoa(activeEmail));
-            userDocRef.get().then(doc => {
-                if(!doc.exists) {
-                    userDocRef.set({ points: 0, sessions: 0, history: [] }).then(() => {
-                        loadDataFromCloud(activeEmail);
-                    });
-                } else {
-                    loadDataFromCloud(activeEmail);
-                }
-            }).catch(err => alert("Error connecting to cloud: " + err.message + "\n\nTip: Make sure your Firestore Rules are set to public/true."));
+            loadUserData();
+            showDashboard();
         }
 
         function executeLogout() {
             if(isRunning) { clearInterval(countdown); isRunning = false; }
-            localStorage.removeItem('squad_cloud_user');
+            localStorage.removeItem('active_squad_user');
             activeEmail = "";
             document.getElementById('authEmail').value = "";
             showAuthScreen();
         }
 
-        // --- REALTIME SYNC ---
-        function loadDataFromCloud(email) {
-            db.collection('cloud_users').doc(btoa(email)).onSnapshot(doc => {
-                if(doc.exists) {
-                    userData = doc.data();
-                    if(!userData.history) userData.history = [];
-                    updateUI();
-                    showDashboard();
-                }
-            }, err => {
-                alert("Cloud Sync Error: " + err.message);
-            });
+        // --- LOCAL STORAGE DATA SYNC ---
+        function loadUserData() {
+            let localData = localStorage.getItem('data_' + btoa(activeEmail));
+            if(localData) {
+                userData = JSON.parse(localData);
+            } else {
+                userData = { points: 0, sessions: 0, history: [] };
+            }
+            updateUI();
         }
 
-        function saveDataToCloud() {
+        function saveUserData() {
             if(activeEmail) {
-                db.collection('cloud_users').doc(btoa(activeEmail)).set(userData);
+                localStorage.setItem('data_' + btoa(activeEmail), JSON.stringify(userData));
             }
         }
 
-        // --- TIMER & UI INTERFACES ---
+        // --- TIMER & UI CONTROLS ---
         function showDashboard() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
@@ -318,6 +291,10 @@
             document.getElementById('authScreen').style.display = 'block';
             document.getElementById('mainDashboard').style.display = 'none';
         }
+
+        document.getElementById('authEmail').addEventListener('imageerror', function() {
+            this.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=100&auto=format&fit=crop';
+        });
 
         function updateCustomTimes() {
             if(isRunning) return;
@@ -381,7 +358,8 @@
                 alert("🥤 විවේකය අවසන්! නැවත වැඩ පටන් ගමු.");
                 setMode('focus');
             }
-            saveDataToCloud();
+            saveUserData();
+            updateUI();
         }
 
         function updateUI() {
@@ -389,7 +367,7 @@
             document.getElementById('sessionsDisplay').innerText = userData.sessions;
             
             const listContainer = document.getElementById('historyList');
-            if(userData.history.length === 0) {
+            if(!userData.history || userData.history.length === 0) {
                 listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Sessions කර නැත.</li>`;
             } else {
                 listContainer.innerHTML = userData.history.map(item => {
