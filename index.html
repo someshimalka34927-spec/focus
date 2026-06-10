@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Premium Study Space - AL Science Squad</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --bg-overlay: linear-gradient(135deg, rgba(10, 11, 18, 0.85) 0%, rgba(20, 24, 38, 0.9) 100%);
@@ -41,7 +46,6 @@
             z-index: 0;
         }
 
-        /* --- Welcome / Auth Screen --- */
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -55,10 +59,8 @@
             max-width: 360px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
             text-align: center;
-            animation: fadeIn 0.5s ease;
         }
 
-        /* --- Main Dashboard (පළල සහ Padding අඩු කර සකස් කළා) --- */
         .dashboard-container {
             position: relative;
             z-index: 1;
@@ -69,24 +71,16 @@
             padding: 25px;
             border-radius: 24px;
             width: 100%;
-            max-width: 410px; /* සයිස් එක ගාණට අඩු කළා */
+            max-width: 410px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
             display: none;
-            animation: fadeIn 0.8s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
         h2 { font-size: 1.6em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 15px; }
-        
-        .squad-tag { font-size: 0.95em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; letter-spacing: 0.5px; }
+        .squad-tag { font-size: 0.95em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
 
-        /* Telegram Button */
         .tg-link-btn {
             display: inline-flex;
             align-items: center;
@@ -101,42 +95,45 @@
             font-weight: bold;
             margin-bottom: 15px;
             transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(36, 161, 222, 0.25);
         }
-        .tg-link-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(36, 161, 222, 0.4);
-            background: #28b1f5;
+
+        /* Google Button Styling */
+        .google-btn {
+            background: white !important;
+            color: #333 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .stat-card { background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
         .stat-val { font-size: 1.4em; font-weight: bold; color: #fff; }
-        .stat-label { font-size: 0.7em; color: #a4b5cf; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-label { font-size: 0.7em; color: #a4b5cf; text-transform: uppercase; }
 
         .mode-selectors { display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; }
-        .mode-btn { background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.8em; }
-        .mode-btn.active { background: rgba(189, 147, 249, 0.2); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(189, 147, 249, 0.15); }
+        .mode-btn { background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.8em; }
+        .mode-btn.active { background: rgba(189, 147, 249, 0.2); color: var(--accent-purple); border-color: var(--accent-purple); }
 
         .timer-display-box { margin-bottom: 20px; }
-        .time-digits { font-size: 4.2em; font-weight: 700; letter-spacing: -2px; margin-bottom: 8px; font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(139, 233, 253, 0.15); color: #fff; }
+        .time-digits { font-size: 4.2em; font-weight: 700; color: #fff; }
         
-        .main-action-btn { background: var(--btn-gradient); color: white; border: none; padding: 12px 35px; border-radius: 50px; font-weight: bold; font-size: 0.95em; cursor: pointer; box-shadow: 0 6px 15px rgba(98, 114, 164, 0.2); transition: 0.3s; }
-        .main-action-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(189, 147, 249, 0.35); background: linear-gradient(90deg, #bd93f9, #ff79c6); }
+        .main-action-btn { background: var(--btn-gradient); color: white; border: none; padding: 12px 35px; border-radius: 50px; font-weight: bold; font-size: 0.95em; cursor: pointer; width: 100%; box-sizing: border-box; }
 
         .input-wrapper { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-top: 20px; }
-        label { font-size: 0.8em; color: #a4b5cf; margin-left: 3px; }
-        .custom-input { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); color: white; font-size: 0.9em; outline: none; transition: 0.3s; box-sizing: border-box; width: 100%; }
-        .custom-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 8px rgba(139, 233, 253, 0.12); }
+        .custom-input { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); color: white; font-size: 0.9em; outline: none; width: 100%; box-sizing: border-box; }
 
-        .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 3px solid var(--accent-teal); padding: 12px; border-radius: 0 12px 12px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.02); }
+        .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 3px solid var(--accent-teal); padding: 12px; border-radius: 0 12px 12px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; }
         .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
         .history-box { margin-top: 20px; background: rgba(0, 0, 0, 0.3); border-radius: 14px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
         .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-purple); margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
         .history-list { max-height: 100px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
         .history-item { font-size: 0.8em; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
-        .history-date { color: var(--text-muted); font-size: 0.75em; }
 
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 12px; font-size: 0.8em; }
         .logout-btn { background: none; border: none; color: var(--accent-pink); cursor: pointer; font-weight: bold; }
@@ -148,35 +145,36 @@
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
         
-        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">
-            ✈️ Join Telegram Channel
-        </a>
+        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Join Telegram Channel</a>
         
         <div style="text-align: left; margin-bottom: 15px;">
-            <label>Email Address</label>
-            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:4px;" onkeydown="checkEnterKey(event, 'auth')">
+            <label style="font-size: 0.85em; color: #a4b5cf;">Email Address</label>
+            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email එක..." onkeydown="checkEnterKey(event, 'auth')">
+            
+            <label style="font-size: 0.85em; color: #a4b5cf; margin-top: 10px; display: block;">Password</label>
+            <input type="password" id="authPassword" class="custom-input" placeholder="මුරපදය..." onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button class="main-action-btn" onclick="executeAuth('login')">Sign In</button>
-            <button class="main-action-btn" onclick="executeAuth('signup')" style="background: transparent; border: 1px solid var(--accent-purple); box-shadow: none; color: var(--accent-purple);">Create an Account</button>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="main-action-btn" onclick="loginWithEmail()">Sign In</button>
+            <button class="main-action-btn" onclick="signUpWithEmail()" style="background: transparent; border: 1px solid var(--accent-purple); color: var(--accent-purple);">Create an Account</button>
+            
+            <button class="main-action-btn google-btn" onclick="loginWithGoogle()">
+                <img src="https://g.atcdn.co/images/google-icon.svg" width="18" alt="Google"> Continue with Google
+            </button>
         </div>
     </div>
 
-
     <div class="dashboard-container" id="mainDashboard">
-        
         <div class="dashboard-header">
-            <span>⚡ User: <b style="color: var(--accent-teal);" id="userDisplayBadg">email@test.com</b></span>
+            <span>⚡ User: <b style="color: var(--accent-teal);" id="userDisplayBadg">...</b></span>
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
         <h1>AI Premium Focus</h1>
         <div class="squad-tag">AL Science Squad 2028</div>
 
-        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">
-            ✈️ Visit Telegram Squad
-        </a>
+        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Visit Telegram Squad</a>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -196,24 +194,24 @@
 
         <div class="timer-display-box">
             <div class="time-digits" id="timer">25:00</div>
-            <button class="main-action-btn" id="timerBtn" onclick="toggleTimer()">Start Session</button>
+            <button class="main-action-btn" id="timerBtn" onclick="toggleTimer()" style="width: auto; padding: 12px 40px;">Start Session</button>
         </div>
 
         <div class="inline-inputs">
             <div>
-                <label>Focus (Min)</label>
-                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 8px;">
+                <label style="font-size:0.8em; color:#a4b5cf;">Focus (Min)</label>
+                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center;">
             </div>
             <div>
-                <label>Break (Min)</label>
-                <input type="number" id="customBreak" class="custom-input" value="5" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 8px;">
+                <label style="font-size:0.8em; color:#a4b5cf;">Break (Min)</label>
+                <input type="number" id="customBreak" class="custom-input" value="5" min="1" onchange="updateCustomTimes()" style="text-align:center;">
             </div>
         </div>
 
         <div class="input-wrapper">
-            <label>දැන් කරන්න යන වැඩ කොටස:</label>
+            <label style="font-size:0.8em; color:#a4b5cf;">දැන් කරන්න යන වැඩ කොටස:</label>
             <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ" onkeydown="checkEnterKey(event, 'task')">
-            <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4; padding: 10px;">AI Smart Plan</button>
+            <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4;">AI Smart Plan</button>
         </div>
 
         <div class="ai-response" id="aiOutput">
@@ -228,95 +226,107 @@
     </div>
 
     <script>
-        let countdown;
-        let isRunning = false;
-        let currentMode = 'focus'; 
-        let focusTime = 25 * 60;
-        let breakTime = 5 * 60;
-        let timeLeft = focusTime;
+        // 🔴 ඔයාගේ FIREBASE CONFIG විස්තර ටික මෙතනට පේස්ට් කරන්න 🔴
+        // (Firebase Console -> Project Settings -> Web App එකක් ඇඩ් කරලා මේ ටික ගන්න)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        let userData = { email: "", points: 0, sessions: 0, history: [] };
+        let countdown, isRunning = false, currentMode = 'focus'; 
+        let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
+        let currentUser = null;
+        let userData = { points: 0, sessions: 0, history: [] };
 
-        window.onload = function() {
-            let activeUser = localStorage.getItem('premium_user_session');
-            if(activeUser) {
-                loadUserData(activeUser);
-                showDashboard();
+        // Auth State Listener (දැනටමත් ලොග් වෙලා ඉන්නවාදැයි නිතරම බලයි)
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('userDisplayBadg').innerText = user.email;
+                loadDataFromCloud(user.uid);
             } else {
                 showAuthScreen();
             }
-        };
+        });
 
         function checkEnterKey(event, type) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                if (type === 'auth') {
-                    executeAuth('login');
-                } else if (type === 'task') {
-                    askAIForPlan();
-                }
+                if (type === 'auth') loginWithEmail();
+                if (type === 'task') askAIForPlan();
             }
         }
 
-        function executeAuth(type) {
+        // --- EMAIL LOGIN & SIGN UP ---
+        function loginWithEmail() {
             const email = document.getElementById('authEmail').value.trim();
-            if(!email || !email.includes('@')) {
-                alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
-                return;
-            }
+            const password = document.getElementById('authPassword').value;
+            if(!email || !password) return alert("කරුණාකර සියල්ල පුරවන්න!");
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(err => alert("ඇතුළත් කිරීම් වැරදියි: " + err.message));
+        }
 
-            let cloudKey = 'premium_focus_' + btoa(email);
-            let savedData = localStorage.getItem(cloudKey);
+        function signUpWithEmail() {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            if(password.length < 6) return alert("Password එකට අවම ලකුණු 6ක් ඕනේ!");
 
-            if (type === 'login') {
-                if(savedData) {
-                    userData = JSON.parse(savedData);
-                    alert("🔄 සාර්ථකව සම්බන්ධ වුණා!");
-                } else {
-                    alert("❌ මේ Email එකෙන් ගිණුමක් නැත. 'Create an Account' ඔබන්න.");
-                    return;
-                }
-            } else if (type === 'signup') {
-                if(savedData) {
-                    alert("⚠️ මේ Email එකෙන් දැනටමත් ගිණුමක් ඇත.");
-                    return;
-                } else {
-                    userData = { email: email, points: 0, sessions: 0, history: [] };
-                    alert("🌌 නව ගිණුමක් සාර්ථකව සෑදුවා!");
-                }
-            }
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(cred => {
+                    db.collection('users').doc(cred.user.uid).set({ points: 0, sessions: 0, history: [] });
+                    alert("ගිණුම සාර්ථකව සෑදුවා!");
+                }).catch(err => alert(err.message));
+        }
 
-            localStorage.setItem('premium_user_session', email);
-            saveDataToCloud();
-            showDashboard();
+        // --- GOOGLE LOGIN ---
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).then(cred => {
+                db.collection('users').doc(cred.user.uid).get().then(doc => {
+                    if(!doc.exists) {
+                        db.collection('users').doc(cred.user.uid).set({ points: 0, sessions: 0, history: [] });
+                    }
+                });
+            }).catch(err => alert(err.message));
         }
 
         function executeLogout() {
             if(isRunning) { clearInterval(countdown); isRunning = false; }
-            localStorage.removeItem('premium_user_session');
-            userData = { email: "", points: 0, sessions: 0, history: [] };
-            document.getElementById('authEmail').value = "";
-            showAuthScreen();
+            auth.signOut();
         }
 
-        function loadUserData(email) {
-            let cloudKey = 'premium_focus_' + btoa(email);
-            let data = localStorage.getItem(cloudKey);
-            if(data) userData = JSON.parse(data);
+        // --- CLOUD FIRESTORE DATA SAVE & LOAD ---
+        function loadDataFromCloud(uid) {
+            db.collection('users').doc(uid).onSnapshot(doc => {
+                if(doc.exists) {
+                    userData = doc.data();
+                    if(!userData.history) userData.history = [];
+                    updateUI();
+                    showDashboard();
+                }
+            });
         }
 
         function saveDataToCloud() {
-            if(userData.email) {
-                let cloudKey = 'premium_focus_' + btoa(userData.email);
-                localStorage.setItem(cloudKey, JSON.stringify(userData));
+            if(currentUser) {
+                db.collection('users').doc(currentUser.uid).set(userData);
             }
         }
 
+        // --- TIMER & UI FUNCTIONS ---
         function showDashboard() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
-            document.getElementById('userDisplayBadg').innerText = userData.email;
-            updateUI();
         }
 
         function showAuthScreen() {
@@ -387,7 +397,6 @@
                 setMode('focus');
             }
             saveDataToCloud();
-            updateUI();
         }
 
         function updateUI() {
@@ -395,17 +404,12 @@
             document.getElementById('sessionsDisplay').innerText = userData.sessions;
             
             const listContainer = document.getElementById('historyList');
-            if(!userData.history || userData.history.length === 0) {
+            if(userData.history.length === 0) {
                 listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Sessions කර නැත.</li>`;
             } else {
                 listContainer.innerHTML = userData.history.map(item => {
                     let badgeColor = item.type === "Focus" ? "var(--accent-teal)" : "var(--accent-pink)";
-                    return `
-                        <li class="history-item">
-                            <span><b style="color:${badgeColor}">[${item.type}]</b> ${item.task}</span>
-                            <span class="history-date">${item.time}</span>
-                        </li>
-                    `;
+                    return `<li class="history-item"><span><b style="color:${badgeColor}">[${item.type}]</b> ${item.task}</span><span>${item.time}</span></li>`;
                 }).join('');
             }
             displayTime();
@@ -413,16 +417,10 @@
 
         function askAIForPlan() {
             const topic = document.getElementById('taskTopic').value;
-            if(!topic.trim()) { alert("කරුණාකර වැඩේ නම ලියන්න!"); return; }
+            if(!topic.trim()) return alert("කරුණාකර වැඩේ නම ලියන්න!");
             let totalMin = Math.floor(focusTime / 60);
-            let t1 = Math.floor(totalMin * 0.4);
-            let t2 = Math.floor(totalMin * 0.4);
-            let t3 = totalMin - (t1 + t2);
-            document.getElementById('aiSteps').innerHTML = `
-                • 🌌 <b>විනාඩි ${t1}:</b> න්‍යාය කරුණු කියවන්න.<br>
-                • 📝 <b>විනාඩි ${t2}:</b> Points මතකයෙන් ලියන්න.<br>
-                • 🎯 <b>විනාඩි ${t3}:</b> ගැටලු විසඳන්න.
-            `;
+            let t1 = Math.floor(totalMin * 0.4), t2 = Math.floor(totalMin * 0.4), t3 = totalMin - (t1 + t2);
+            document.getElementById('aiSteps').innerHTML = `• 🌌 <b>විනාඩි ${t1}:</b> න්‍යාය කරුණු කියවන්න.<br>• 📝 <b>විනාඩි ${t2}:</b> Points මතකයෙන් ලියන්න.<br>• 🎯 <b>විනාඩි ${t3}:</b> ගැටලු විසඳන්න.`;
             document.getElementById('aiOutput').style.display = "block";
         }
     </script>
