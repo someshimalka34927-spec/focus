@@ -45,16 +45,6 @@
             z-index: 0;
         }
 
-        .squad-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 15px auto;
-            display: block;
-            box-shadow: 0 0 20px rgba(189, 147, 249, 0.6);
-            border: 2px solid #ffcc00;
-        }
-
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -223,18 +213,35 @@
             appId: "1:923352488085:web:00ec824c1761a30b17639c"
         };
         
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let countdown, isRunning = false, currentMode = 'focus'; 
+        let isRunning = false, currentMode = 'focus'; 
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeEmail = "";
         let userData = { points: 0, sessions: 0, history: [] };
         let unsubscribeSnapshot = null;
+        let expectedEndTime = null;
+        let localTimerInterval = null;
 
-        // Auto Login System on load
+        // Service Worker setup for Background Sync & Updates
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker Live!'))
+            .catch(err => console.error('Service Worker Error:', err));
+            
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data && event.data.action === 'timerFinished') {
+                    handleTimerCompletion();
+                }
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser && savedUser.trim() !== "") {
                 activeEmail = savedUser.trim().toLowerCase();
@@ -254,11 +261,13 @@
             }
         }
 
-        // --- CLOUD LOGIN ---
         function executeCloudLogin() {
             const email = document.getElementById('authEmail').value.trim().toLowerCase();
             if(!email || !email.includes('@')) {
                 return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
+            }
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                Notification.requestPermission();
             }
 
             activeEmail = email;
@@ -278,13 +287,11 @@
                     showDashboard();
                     loadDataFromCloud(activeEmail);
                 }
-            }).catch(err => {
-                alert("Error connecting: " + err.message);
-            });
+            }).catch(err => alert("Error connecting: " + err.message));
         }
 
         function executeLogout() {
-            if(isRunning) { clearInterval(countdown); isRunning = false; }
+            stopTimerSystem();
             if(unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
             localStorage.removeItem('squad_cloud_user');
             activeEmail = "";
@@ -292,7 +299,6 @@
             showAuthScreen();
         }
 
-        // --- REALTIME SYNC ---
         function loadDataFromCloud(email) {
             let safeDocId = btoa(email).replace(/=/g, "");
             if(unsubscribeSnapshot) unsubscribeSnapshot();
@@ -303,9 +309,7 @@
                     if(!userData.history) userData.history = [];
                     updateUI();
                 }
-            }, err => {
-                console.log("Snapshot error: " + err.message);
-            });
+            }, err => console.log(err));
         }
 
         function saveDataToCloud() {
@@ -315,7 +319,6 @@
             }
         }
 
-        // --- TIMER & UI INTERFACES ---
         function showDashboard() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
@@ -345,30 +348,56 @@
         }
 
         function displayTime() {
-            let mins = Math.floor(timeLeft / 60);
-            let secs = timeLeft % 60;
+            let mins = Math.max(0, Math.floor(timeLeft / 60));
+            let secs = Math.max(0, timeLeft % 60);
             document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         function toggleTimer() {
             const btn = document.getElementById('timerBtn');
             if (isRunning) {
-                clearInterval(countdown);
-                isRunning = false;
+                stopTimerSystem();
                 btn.innerText = "Resume";
             } else {
                 isRunning = true;
                 btn.innerText = "Pause";
-                countdown = setInterval(() => {
-                    timeLeft--;
-                    displayTime();
+                
+                expectedEndTime = Date.now() + (timeLeft * 1000);
+                
+                // Pass live updates triggers to sw.js
+                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({
+                        action: 'startTimer',
+                        duration: timeLeft,
+                        mode: currentMode
+                    });
+                }
+
+                localTimerInterval = setInterval(() => {
+                    let remainingMs = expectedEndTime - Date.now();
+                    timeLeft = Math.ceil(remainingMs / 1000);
+                    
                     if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        isRunning = false;
-                        sessionCompleted();
+                        handleTimerCompletion();
+                    } else {
+                        displayTime();
                     }
-                }, 1000);
+                }, 500);
             }
+        }
+
+        function stopTimerSystem() {
+            isRunning = false;
+            if(localTimerInterval) clearInterval(localTimerInterval);
+            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ action: 'cancelTimer' });
+            }
+        }
+
+        function handleTimerCompletion() {
+            isRunning = false;
+            if(localTimerInterval) clearInterval(localTimerInterval);
+            sessionCompleted();
         }
 
         function sessionCompleted() {
@@ -378,7 +407,6 @@
 
             if (currentMode === 'focus') {
                 let totalMinutesAllocated = Math.floor(focusTime / 60);
-                
                 if (totalMinutesAllocated >= 10) {
                     let earnedPoints = totalMinutesAllocated; 
                     userData.points += earnedPoints;
@@ -387,11 +415,10 @@
                     alert(`🎉 Focus Session එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
                 } else {
                     alert("⚠️ Points ලැබෙන්න නම් Focus Session එක අඩුම විනාඩි 10ක්වත් තිබිය යුතුයි!");
-                    userData.history.unshift({ task: `${currentTask} (No Points - Under 10 min)`, type: "Focus", time: timeString });
+                    userData.history.unshift({ task: `${currentTask} (No Points)`, type: "Focus", time: timeString });
                 }
                 setMode('break');
             } else {
-                // Break සෙෂන් සඳහා 0 Points ලබාදෙන පරිදි වෙනස් කරන ලදී
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
                 alert("🥤 විවේකය අවසන්! නැවත වැඩ පටන් ගමු.");
                 setMode('focus');
