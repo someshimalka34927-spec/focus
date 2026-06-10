@@ -68,7 +68,7 @@
             max-width: 360px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
             text-align: center;
-            display: block; /* Default visible until JS runs */
+            display: block;
         }
 
         .dashboard-container {
@@ -233,13 +233,13 @@
         let userData = { points: 0, sessions: 0, history: [] };
         let unsubscribeSnapshot = null;
 
-        // Auto Login System on load - Fixed to ensure UI shifts immediately if user exists
+        // Auto Login System on load
         window.addEventListener('DOMContentLoaded', () => {
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser && savedUser.trim() !== "") {
                 activeEmail = savedUser.trim().toLowerCase();
                 document.getElementById('userDisplayBadg').innerText = activeEmail;
-                showDashboard(); // Instantly show dashboard to avoid flickering
+                showDashboard(); 
                 loadDataFromCloud(activeEmail);
             } else {
                 showAuthScreen();
@@ -279,7 +279,7 @@
                     loadDataFromCloud(activeEmail);
                 }
             }).catch(err => {
-                alert("Error connecting: " + err.message + "\n\nFirestore Rules update කර ඇති බව ස්ථිර කරගන්න.");
+                alert("Error connecting: " + err.message);
             });
         }
 
@@ -292,11 +292,9 @@
             showAuthScreen();
         }
 
-        // --- REALTIME SYNC (Handles auto login stream correctly) ---
+        // --- REALTIME SYNC ---
         function loadDataFromCloud(email) {
             let safeDocId = btoa(email).replace(/=/g, "");
-            
-            // Unsubscribe from previous snapshot if any
             if(unsubscribeSnapshot) unsubscribeSnapshot();
             
             unsubscribeSnapshot = db.collection('cloud_users').doc(safeDocId).onSnapshot(doc => {
@@ -379,13 +377,21 @@
             let timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
             if (currentMode === 'focus') {
-                userData.points += 100;
-                userData.sessions += 1;
-                userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
-                alert("🎉 Focus Session එක අවසන්! +100 Points!");
+                let totalMinutesAllocated = Math.floor(focusTime / 60);
+                
+                if (totalMinutesAllocated >= 10) {
+                    let earnedPoints = totalMinutesAllocated; 
+                    userData.points += earnedPoints;
+                    userData.sessions += 1;
+                    userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
+                    alert(`🎉 Focus Session එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
+                } else {
+                    alert("⚠️ Points ලැබෙන්න නම් Focus Session එක අඩුම විනාඩි 10ක්වත් තිබිය යුතුයි!");
+                    userData.history.unshift({ task: `${currentTask} (No Points - Under 10 min)`, type: "Focus", time: timeString });
+                }
                 setMode('break');
             } else {
-                userData.points += 20;
+                // Break සෙෂන් සඳහා 0 Points ලබාදෙන පරිදි වෙනස් කරන ලදී
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
                 alert("🥤 විවේකය අවසන්! නැවත වැඩ පටන් ගමු.");
                 setMode('focus');
