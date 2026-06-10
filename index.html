@@ -10,8 +10,8 @@
 
     <style>
         :root {
-            --bg-overlay: linear-gradient(135deg, rgba(10, 11, 18, 0.85) 0%, rgba(20, 24, 38, 0.9) 100%);
-            --card-bg: rgba(22, 25, 41, 0.65);
+            --bg-overlay: linear-gradient(135deg, rgba(10, 11, 18, 0.9) 0%, rgba(20, 24, 38, 0.95) 100%);
+            --card-bg: rgba(22, 25, 41, 0.7);
             --accent-purple: #bd93f9;
             --accent-teal: #8be9fd;
             --accent-pink: #ff79c6;
@@ -45,7 +45,18 @@
             z-index: 0;
         }
 
-        /* --- SImple Email Auth Screen --- */
+        /* Logo Animation */
+        .squad-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: block;
+            box-shadow: 0 0 20px rgba(189, 147, 249, 0.6);
+            border: 2px solid #ffcc00;
+        }
+
+        /* --- Simple Email Auth Screen --- */
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -79,7 +90,7 @@
         }
 
         h1 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
-        h2 { font-size: 1.6em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 15px; }
+        h2 { font-size: 1.6em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 5px; }
         .squad-tag { font-size: 0.95em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
 
         .tg-link-btn {
@@ -130,6 +141,7 @@
 <body>
 
     <div class="auth-screen-container" id="authScreen">
+        <img src="photo_2026-06-02_10-22-04.jpg" class="squad-logo" alt="AL Science Squad Logo">
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
         
@@ -150,6 +162,7 @@
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
+        <img src="photo_2026-06-02_10-22-04.jpg" class="squad-logo" style="width: 70px; height: 70px;" alt="Logo">
         <h1>AI Premium Focus</h1>
         <div class="squad-tag">AL Science Squad 2028</div>
 
@@ -205,7 +218,7 @@
     </div>
 
     <script>
-        // 🔴 ඔයාගේ FIREBASE CONFIG විස්තර ටික මෙතනට පේස්ට් කරන්න 🔴
+        // 🔴 ඔයාගේ FIREBASE CONFIG விස්තර ටික මෙතනට පේස්ට් කරන්න 🔴
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
@@ -224,7 +237,7 @@
         let activeEmail = "";
         let userData = { points: 0, sessions: 0, history: [] };
 
-        // Auto Login if session exists in browser
+        // Auto Login System
         window.onload = function() {
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser) {
@@ -244,7 +257,7 @@
             }
         }
 
-        // --- DIRECT EMAIL LOGIN & DB CHECK ---
+        // --- DIRECT EMAIL LOGIN ---
         function executeCloudLogin() {
             const email = document.getElementById('authEmail').value.trim().toLowerCase();
             if(!email || !email.includes('@')) {
@@ -255,19 +268,16 @@
             localStorage.setItem('squad_cloud_user', activeEmail);
             document.getElementById('userDisplayBadg').innerText = activeEmail;
             
-            // Database එකේ මේ Email එකෙන් දැනටමත් කෙනෙක් ඉන්නවද බලනවා, නැත්නම් අලුතෙන් හදනවා
             let userDocRef = db.collection('cloud_users').doc(btoa(activeEmail));
             userDocRef.get().then(doc => {
                 if(!doc.exists) {
-                    // New User Create
                     userDocRef.set({ points: 0, sessions: 0, history: [] }).then(() => {
                         loadDataFromCloud(activeEmail);
                     });
                 } else {
-                    // Existing User Load
                     loadDataFromCloud(activeEmail);
                 }
-            }).catch(err => alert("Error connecting to cloud: " + err.message));
+            }).catch(err => alert("Error connecting to cloud: " + err.message + "\n\nTip: Make sure your Firestore Rules are set to public/true."));
         }
 
         function executeLogout() {
@@ -278,7 +288,7 @@
             showAuthScreen();
         }
 
-        // --- REALTIME CLOUD SYNC ---
+        // --- REALTIME SYNC ---
         function loadDataFromCloud(email) {
             db.collection('cloud_users').doc(btoa(email)).onSnapshot(doc => {
                 if(doc.exists) {
@@ -287,6 +297,8 @@
                     updateUI();
                     showDashboard();
                 }
+            }, err => {
+                alert("Cloud Sync Error: " + err.message);
             });
         }
 
