@@ -28,7 +28,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             overflow-x: hidden;
             position: relative;
         }
@@ -41,7 +41,7 @@
             z-index: 0;
         }
 
-        /* --- Welcome / Auth Screen Component --- */
+        /* --- Welcome / Auth Screen --- */
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -49,16 +49,16 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 40px;
-            border-radius: 28px;
+            padding: 30px;
+            border-radius: 24px;
             width: 100%;
-            max-width: 400px;
+            max-width: 360px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
             text-align: center;
             animation: fadeIn 0.5s ease;
         }
 
-        /* --- Main Dashboard Component --- */
+        /* --- Main Dashboard (පළල සහ Padding අඩු කර සකස් කළා) --- */
         .dashboard-container {
             position: relative;
             z-index: 1;
@@ -66,10 +66,10 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 35px;
-            border-radius: 28px;
+            padding: 25px;
+            border-radius: 24px;
             width: 100%;
-            max-width: 480px;
+            max-width: 410px; /* සයිස් එක ගාණට අඩු කළා */
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
             display: none;
@@ -77,68 +77,68 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
-        h2 { font-size: 1.9em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 25px; }
+        h1 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
+        h2 { font-size: 1.6em; font-weight: 800; margin-bottom: 4px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 15px; }
         
-        .squad-tag { font-size: 1.05em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 1px; }
+        .squad-tag { font-size: 0.95em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; letter-spacing: 0.5px; }
 
-        /* Telegram Button Styling */
+        /* Telegram Button */
         .tg-link-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             background: #24A1DE;
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
+            box-shadow: 0 4px 12px rgba(36, 161, 222, 0.25);
         }
         .tg-link-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(36, 161, 222, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(36, 161, 222, 0.4);
             background: #28b1f5;
         }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03); }
-        .stat-val { font-size: 1.6em; font-weight: bold; color: #fff; }
-        .stat-label { font-size: 0.75em; color: #a4b5cf; text-transform: uppercase; letter-spacing: 1px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .stat-val { font-size: 1.4em; font-weight: bold; color: #fff; }
+        .stat-label { font-size: 0.7em; color: #a4b5cf; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .mode-selectors { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-        .mode-btn { background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.85em; }
-        .mode-btn.active { background: rgba(189, 147, 249, 0.2); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 15px rgba(189, 147, 249, 0.2); }
+        .mode-selectors { display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; }
+        .mode-btn { background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.8em; }
+        .mode-btn.active { background: rgba(189, 147, 249, 0.2); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(189, 147, 249, 0.15); }
 
-        .timer-display-box { margin-bottom: 25px; }
-        .time-digits { font-size: 5em; font-weight: 700; letter-spacing: -2px; margin-bottom: 12px; font-variant-numeric: tabular-nums; text-shadow: 0 0 25px rgba(139, 233, 253, 0.15); color: #fff; }
+        .timer-display-box { margin-bottom: 20px; }
+        .time-digits { font-size: 4.2em; font-weight: 700; letter-spacing: -2px; margin-bottom: 8px; font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(139, 233, 253, 0.15); color: #fff; }
         
-        .main-action-btn { background: var(--btn-gradient); color: white; border: none; padding: 14px 40px; border-radius: 50px; font-weight: bold; font-size: 1.05em; cursor: pointer; box-shadow: 0 8px 20px rgba(98, 114, 164, 0.2); transition: 0.3s; }
-        .main-action-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(189, 147, 249, 0.4); background: linear-gradient(90deg, #bd93f9, #ff79c6); }
+        .main-action-btn { background: var(--btn-gradient); color: white; border: none; padding: 12px 35px; border-radius: 50px; font-weight: bold; font-size: 0.95em; cursor: pointer; box-shadow: 0 6px 15px rgba(98, 114, 164, 0.2); transition: 0.3s; }
+        .main-action-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(189, 147, 249, 0.35); background: linear-gradient(90deg, #bd93f9, #ff79c6); }
 
-        .input-wrapper { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 25px; }
-        label { font-size: 0.85em; color: #a4b5cf; margin-left: 5px; }
-        .custom-input { padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); color: white; font-size: 0.95em; outline: none; transition: 0.3s; box-sizing: border-box; width: 100%; }
-        .custom-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 10px rgba(139, 233, 253, 0.15); }
+        .input-wrapper { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-top: 20px; }
+        label { font-size: 0.8em; color: #a4b5cf; margin-left: 3px; }
+        .custom-input { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); color: white; font-size: 0.9em; outline: none; transition: 0.3s; box-sizing: border-box; width: 100%; }
+        .custom-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 8px rgba(139, 233, 253, 0.12); }
 
-        .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 4px solid var(--accent-teal); padding: 15px; border-radius: 0 14px 14px 0; text-align: left; margin-top: 20px; display: none; font-size: 0.9em; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.02); }
-        .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 3px solid var(--accent-teal); padding: 12px; border-radius: 0 12px 12px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.02); }
+        .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
-        .history-box { margin-top: 30px; background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
-        .history-title { font-size: 0.95em; font-weight: bold; color: var(--accent-purple); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
-        .history-list { max-height: 120px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
-        .history-item { font-size: 0.85em; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
-        .history-date { color: var(--text-muted); font-size: 0.8em; }
+        .history-box { margin-top: 20px; background: rgba(0, 0, 0, 0.3); border-radius: 14px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
+        .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-purple); margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
+        .history-list { max-height: 100px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .history-item { font-size: 0.8em; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
+        .history-date { color: var(--text-muted); font-size: 0.75em; }
 
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 14px; font-size: 0.85em; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 12px; font-size: 0.8em; }
         .logout-btn { background: none; border: none; color: var(--accent-pink); cursor: pointer; font-weight: bold; }
     </style>
 </head>
@@ -152,14 +152,14 @@
             ✈️ Join Telegram Channel
         </a>
         
-        <div style="text-align: left; margin-bottom: 20px;">
+        <div style="text-align: left; margin-bottom: 15px;">
             <label>Email Address</label>
-            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:5px;" onkeydown="checkEnterKey(event, 'auth')">
+            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:4px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
             <button class="main-action-btn" onclick="executeAuth('login')">Sign In</button>
-            <button class="main-action-btn" onclick="executeAuth('signup')" style="background: transparent; border: 1px solid var(--accent-purple); box-shadow: none; color: var(--accent-purple);">Create an Account (Sign Up)</button>
+            <button class="main-action-btn" onclick="executeAuth('signup')" style="background: transparent; border: 1px solid var(--accent-purple); box-shadow: none; color: var(--accent-purple);">Create an Account</button>
         </div>
     </div>
 
@@ -202,22 +202,22 @@
         <div class="inline-inputs">
             <div>
                 <label>Focus (Min)</label>
-                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 10px;">
+                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 8px;">
             </div>
             <div>
                 <label>Break (Min)</label>
-                <input type="number" id="customBreak" class="custom-input" value="5" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 10px;">
+                <input type="number" id="customBreak" class="custom-input" value="5" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 8px;">
             </div>
         </div>
 
         <div class="input-wrapper">
             <label>දැන් කරන්න යන වැඩ කොටස:</label>
             <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ" onkeydown="checkEnterKey(event, 'task')">
-            <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4;">AI Smart Plan</button>
+            <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4; padding: 10px;">AI Smart Plan</button>
         </div>
 
         <div class="ai-response" id="aiOutput">
-            <div style="font-weight: bold; color: var(--accent-teal); margin-bottom: 5px;">✨ AI Session Plan:</div>
+            <div style="font-weight: bold; color: var(--accent-teal); margin-bottom: 4px;">✨ AI Session Plan:</div>
             <div id="aiSteps"></div>
         </div>
 
@@ -271,18 +271,18 @@
             if (type === 'login') {
                 if(savedData) {
                     userData = JSON.parse(savedData);
-                    alert("🔄 සාර්ථකව සම්බන්ධ වුණා! ඔබේ පැරණි දත්ත සහ History නැවත ලබාගත්තා.");
+                    alert("🔄 සාර්ථකව සම්බන්ධ වුණා!");
                 } else {
-                    alert("❌ මේ Email එකෙන් ගිණුමක් සොයාගත නොහැක. කරුණාකර 'Create an Account' බටන් එක ඔබන්න.");
+                    alert("❌ මේ Email එකෙන් ගිණුමක් නැත. 'Create an Account' ඔබන්න.");
                     return;
                 }
             } else if (type === 'signup') {
                 if(savedData) {
-                    alert("⚠️ මේ Email එකෙන් දැනටමත් ගිණුමක් සදා ඇත. Sign In වෙන්න.");
+                    alert("⚠️ මේ Email එකෙන් දැනටමත් ගිණුමක් ඇත.");
                     return;
                 } else {
                     userData = { email: email, points: 0, sessions: 0, history: [] };
-                    alert("🌌 සාර්ථකව නව ගිණුමක් සෑදුවා! Focus Space එකට සාදරයෙන් පිළිගනිමු.");
+                    alert("🌌 නව ගිණුමක් සාර්ථකව සෑදුවා!");
                 }
             }
 
@@ -297,14 +297,12 @@
             userData = { email: "", points: 0, sessions: 0, history: [] };
             document.getElementById('authEmail').value = "";
             showAuthScreen();
-            alert("ගිණුමෙන් සාර්ථකව ඉවත් වුණා.");
         }
 
         function loadUserData(email) {
             let cloudKey = 'premium_focus_' + btoa(email);
             let data = localStorage.getItem(cloudKey);
             if(data) userData = JSON.parse(data);
-            if(!userData.history) userData.history = [];
         }
 
         function saveDataToCloud() {
@@ -380,12 +378,12 @@
                 userData.points += 100;
                 userData.sessions += 1;
                 userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
-                alert("🎉 නියමයි! ඔයා සාර්ථකව Focus Session එක අවසන් කළා. +100 Points!");
+                alert("🎉 Focus Session එක අවසන්! +100 Points!");
                 setMode('break');
             } else {
                 userData.points += 20;
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
-                alert("🥤 විවේකය අවසන්! දැන් නැවතත් ඊළඟ වැඩ කොටස පටන් ගමු. +20 Points!");
+                alert("🥤 විවේකය අවසන්! නැවත වැඩ පටන් ගමු.");
                 setMode('focus');
             }
             saveDataToCloud();
@@ -397,8 +395,8 @@
             document.getElementById('sessionsDisplay').innerText = userData.sessions;
             
             const listContainer = document.getElementById('historyList');
-            if(userData.history.length === 0) {
-                listContainer.innerHTML = `<li style="font-size: 0.85em; color: var(--text-muted); text-align: center; padding-top: 10px;">තවම කිසිදු Session එකක් කර නැත.</li>`;
+            if(!userData.history || userData.history.length === 0) {
+                listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Sessions කර නැත.</li>`;
             } else {
                 listContainer.innerHTML = userData.history.map(item => {
                     let badgeColor = item.type === "Focus" ? "var(--accent-teal)" : "var(--accent-pink)";
@@ -421,9 +419,9 @@
             let t2 = Math.floor(totalMin * 0.4);
             let t3 = totalMin - (t1 + t2);
             document.getElementById('aiSteps').innerHTML = `
-                • 🌌 <b>විනාඩි ${t1}:</b> '${topic}' පිළිබඳ න්‍යායාත්මක කරුණු ඉක්මනින් කියවන්න.<br>
-                • 📝 <b>විනාඩි ${t2}:</b> වැදගත් Points මතකයෙන් සටහන් කරගන්න.<br>
-                • 🎯 <b>විනාඩි ${t3}:</b> අදාළ ගැටලු 3ක් තනිවම විසඳා අවසන් කරන්න.
+                • 🌌 <b>විනාඩි ${t1}:</b> න්‍යාය කරුණු කියවන්න.<br>
+                • 📝 <b>විනාඩි ${t2}:</b> Points මතකයෙන් ලියන්න.<br>
+                • 🎯 <b>විනාඩි ${t3}:</b> ගැටලු විසඳන්න.
             `;
             document.getElementById('aiOutput').style.display = "block";
         }
