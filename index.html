@@ -177,7 +177,7 @@
         <div class="inline-inputs">
             <div>
                 <label style="font-size:0.8em; color:#a4b5cf;">Focus (Min)</label>
-                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center;">
+                <input type="number" id="customFocus" class="custom-input" value="25" min="10" onchange="updateCustomTimes()" style="text-align:center;">
             </div>
             <div>
                 <label style="font-size:0.8em; color:#a4b5cf;">Break (Min)</label>
@@ -224,7 +224,6 @@
         let expectedEndTime = null;
         let localTimerInterval = null;
 
-        // Service Worker setup for Background Sync & Updates
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
             .then(reg => console.log('Service Worker Live!'))
@@ -331,8 +330,22 @@
 
         function updateCustomTimes() {
             if(isRunning) return;
-            focusTime = parseInt(document.getElementById('customFocus').value) * 60;
+
+            // 🚫 Focus කාලය විනාඩි 10ට වඩා අඩු කිරීම වැළැක්වීමේ ප්‍රධාන लॉජික් එක
+            let focusInputVal = parseInt(document.getElementById('customFocus').value);
+            if (isNaN(focusInputVal) || focusInputVal < 10) {
+                alert("⚠️ Focus Session එකක් අඩුම විනාඩි 10ක්වත් තිබිය යුතුය!");
+                document.getElementById('customFocus').value = 10;
+                focusInputVal = 10;
+            }
+
+            focusTime = focusInputVal * 60;
             breakTime = parseInt(document.getElementById('customBreak').value) * 60;
+            if (isNaN(breakTime) || breakTime < 1) {
+                document.getElementById('customBreak').value = 1;
+                breakTime = 60;
+            }
+
             timeLeft = (currentMode === 'focus') ? focusTime : breakTime;
             displayTime();
         }
@@ -359,12 +372,17 @@
                 stopTimerSystem();
                 btn.innerText = "Resume";
             } else {
+                // ආරක්ෂාවක් ලෙස ස්ටාර්ට් කරද්දීත් විනාඩි 10 සීමාව චෙක් කිරීම
+                if (currentMode === 'focus' && (focusTime / 60) < 10) {
+                    focusTime = 10 * 60;
+                    timeLeft = focusTime;
+                    document.getElementById('customFocus').value = 10;
+                }
+
                 isRunning = true;
                 btn.innerText = "Pause";
-                
                 expectedEndTime = Date.now() + (timeLeft * 1000);
                 
-                // Pass live updates triggers to sw.js
                 if (navigator.serviceWorker && navigator.serviceWorker.controller) {
                     navigator.serviceWorker.controller.postMessage({
                         action: 'startTimer',
@@ -407,16 +425,11 @@
 
             if (currentMode === 'focus') {
                 let totalMinutesAllocated = Math.floor(focusTime / 60);
-                if (totalMinutesAllocated >= 10) {
-                    let earnedPoints = totalMinutesAllocated; 
-                    userData.points += earnedPoints;
-                    userData.sessions += 1;
-                    userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
-                    alert(`🎉 Focus Session එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
-                } else {
-                    alert("⚠️ Points ලැබෙන්න නම් Focus Session එක අඩුම විනාඩි 10ක්වත් තිබිය යුතුයි!");
-                    userData.history.unshift({ task: `${currentTask} (No Points)`, type: "Focus", time: timeString });
-                }
+                let earnedPoints = totalMinutesAllocated; 
+                userData.points += earnedPoints;
+                userData.sessions += 1;
+                userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
+                alert(`🎉 Focus Session එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
                 setMode('break');
             } else {
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
