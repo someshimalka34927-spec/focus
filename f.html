@@ -41,23 +41,6 @@
             z-index: 0;
         }
 
-        /* App Logo Styling */
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .app-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #f1c40f; /* ලෝගෝ එකේ කහ පාටට ගැලපෙන්න වෙනස් කළා */
-            box-shadow: 0 0 25px rgba(241, 196, 15, 0.5);
-            background: #000;
-        }
-
         /* --- Welcome / Auth Screen Component --- */
         .auth-screen-container {
             position: relative;
@@ -99,9 +82,32 @@
         }
 
         h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
-        h2 { font-size: 1.9em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
+        h2 { font-size: 1.9em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 25px; }
         
-        .squad-tag { font-size: 1.05em; font-weight: bold; background: linear-gradient(to right, #f1c40f, #eee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 1px; }
+        .squad-tag { font-size: 1.05em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 1px; }
+
+        /* Telegram Button Styling */
+        .tg-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #24A1DE;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
+        }
+        .tg-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(36, 161, 222, 0.5);
+            background: #28b1f5;
+        }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .stat-card { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03); }
@@ -139,15 +145,16 @@
 <body>
 
     <div class="auth-screen-container" id="authScreen">
-        <div class="logo-container">
-            <img class="app-logo" src="https://i.imgur.com/GzB9S8q.png" alt="AL Science Squad Logo">
-        </div>
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
         
+        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">
+            ✈️ Join Telegram Channel
+        </a>
+        
         <div style="text-align: left; margin-bottom: 20px;">
             <label>Email Address</label>
-            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:5px;">
+            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:5px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -164,12 +171,12 @@
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
-        <div class="logo-container">
-            <img class="app-logo" src="https://i.imgur.com/GzB9S8q.png" alt="AL Science Squad Logo">
-        </div>
-
         <h1>AI Premium Focus</h1>
         <div class="squad-tag">AL Science Squad 2028</div>
+
+        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">
+            ✈️ Visit Telegram Squad
+        </a>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -205,7 +212,7 @@
 
         <div class="input-wrapper">
             <label>දැන් කරන්න යන වැඩ කොටස:</label>
-            <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ">
+            <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ" onkeydown="checkEnterKey(event, 'task')">
             <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4;">AI Smart Plan</button>
         </div>
 
@@ -239,6 +246,17 @@
                 showAuthScreen();
             }
         };
+
+        function checkEnterKey(event, type) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                if (type === 'auth') {
+                    executeAuth('login');
+                } else if (type === 'task') {
+                    askAIForPlan();
+                }
+            }
+        }
 
         function executeAuth(type) {
             const email = document.getElementById('authEmail').value.trim();
