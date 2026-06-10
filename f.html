@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Premium Study Space - AL Science Squad</title>
+    <style>
+        :root {
+            --bg-overlay: linear-gradient(135deg, rgba(10, 11, 18, 0.85) 0%, rgba(20, 24, 38, 0.9) 100%);
+            --card-bg: rgba(22, 25, 41, 0.65);
+            --accent-purple: #bd93f9;
+            --accent-teal: #8be9fd;
+            --accent-pink: #ff79c6;
+            --text-main: #f8f8f2;
+            --text-muted: #94a3b8;
+            --btn-gradient: linear-gradient(90deg, #6272a4, #bd93f9);
+        }
+
+        body {
+            background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-overlay);
+            z-index: 0;
+        }
+
+        /* --- Welcome / Auth Screen Component --- */
+        .auth-screen-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(18, 20, 32, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* --- Main Dashboard Component --- */
+        .dashboard-container {
+            position: relative;
+            z-index: 1;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 35px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            display: none; /* Hidden until login */
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 10px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sub-tag { color: #a4b5cf; font-size: 0.9em; margin-bottom: 25px; font-weight: 500; letter-spacing: 0.5px; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03); }
+        .stat-val { font-size: 1.6em; font-weight: bold; color: #fff; }
+        .stat-label { font-size: 0.75em; color: #a4b5cf; text-transform: uppercase; letter-spacing: 1px; }
+
+        .mode-selectors { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .mode-btn { background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.85em; }
+        .mode-btn.active { background: rgba(189, 147, 249, 0.2); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 15px rgba(189, 147, 249, 0.2); }
+
+        .timer-display-box { margin-bottom: 25px; }
+        .time-digits { font-size: 5em; font-weight: 700; letter-spacing: -2px; margin-bottom: 12px; font-variant-numeric: tabular-nums; text-shadow: 0 0 25px rgba(139, 233, 253, 0.15); color: #fff; }
+        
+        .main-action-btn { background: var(--btn-gradient); color: white; border: none; padding: 14px 40px; border-radius: 50px; font-weight: bold; font-size: 1.05em; cursor: pointer; box-shadow: 0 8px 20px rgba(98, 114, 164, 0.2); transition: 0.3s; }
+        .main-action-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(189, 147, 249, 0.4); background: linear-gradient(90deg, #bd93f9, #ff79c6); }
+
+        .input-wrapper { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 25px; }
+        label { font-size: 0.85em; color: #a4b5cf; margin-left: 5px; }
+        .custom-input { padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); color: white; font-size: 0.95em; outline: none; transition: 0.3s; box-sizing: border-box; width: 100%; }
+        .custom-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 10px rgba(139, 233, 253, 0.15); }
+
+        .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 4px solid var(--accent-teal); padding: 15px; border-radius: 0 14px 14px 0; text-align: left; margin-top: 20px; display: none; font-size: 0.9em; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.02); }
+        .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+
+        .history-box { margin-top: 30px; background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
+        .history-title { font-size: 0.95em; font-weight: bold; color: var(--accent-purple); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .history-list { max-height: 120px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .history-item { font-size: 0.85em; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
+        .history-date { color: var(--text-muted); font-size: 0.8em; }
+
+        /* Top Nav inside dashboard */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 14px; font-size: 0.85em; }
+        .logout-btn { background: none; border: none; color: var(--accent-pink); cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-screen-container" id="authScreen">
+        <h2>Welcome to Focus Space</h2>
+        <div class="sub-tag" style="margin-bottom:30px;">AL Science Squad 2028</div>
+        
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label>Email Address</label>
+            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය ඇතුළත් කරන්න..." style="margin-top:5px;">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="main-action-btn" onclick="executeAuth('login')">Sign In</button>
+            <button class="main-action-btn" onclick="executeAuth('signup')" style="background: transparent; border: 1px solid var(--accent-purple); box-shadow: none; color: var(--accent-purple);">Create an Account (Sign Up)</button>
+        </div>
+    </div>
+
+
+    <div class="dashboard-container" id="mainDashboard">
+        
+        <div class="dashboard-header">
+            <span>⚡ User: <b style="color: var(--accent-teal);" id="userDisplayBadg">email@test.com</b></span>
+            <button class="logout-btn" onclick="executeLogout()">Logout</button>
+        </div>
+
+        <h1>AI Premium Focus</h1>
+        <div class="sub-tag">🌌 Master Your Focus Sessions</div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val" id="pointsDisplay">0</div>
+                <div class="stat-label">✨ Total Points</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="sessionsDisplay">0</div>
+                <div class="stat-label">🔥 Sessions</div>
+            </div>
+        </div>
+
+        <div class="mode-selectors">
+            <button class="mode-btn active" id="focusModeBtn" onclick="setMode('focus')">Focus Session</button>
+            <button class="mode-btn" id="breakModeBtn" onclick="setMode('break')">Short Break</button>
+        </div>
+
+        <div class="timer-display-box">
+            <div class="time-digits" id="timer">25:00</div>
+            <button class="main-action-btn" id="timerBtn" onclick="toggleTimer()">Start Session</button>
+        </div>
+
+        <div class="inline-inputs">
+            <div>
+                <label>Focus (Min)</label>
+                <input type="number" id="customFocus" class="custom-input" value="25" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 10px;">
+            </div>
+            <div>
+                <label>Break (Min)</label>
+                <input type="number" id="customBreak" class="custom-input" value="5" min="1" onchange="updateCustomTimes()" style="text-align:center; padding: 10px;">
+            </div>
+        </div>
+
+        <div class="input-wrapper">
+            <label>දැන් කරන්න යන වැඩ කොටස:</label>
+            <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ">
+            <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 5px; background: #6272a4;">AI Smart Plan</button>
+        </div>
+
+        <div class="ai-response" id="aiOutput">
+            <div style="font-weight: bold; color: var(--accent-teal); margin-bottom: 5px;">✨ AI Session Plan:</div>
+            <div id="aiSteps"></div>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title">📊 Session History:</div>
+            <ul class="history-list" id="historyList"></ul>
+        </div>
+    </div>
+
+    <script>
+        let countdown;
+        let isRunning = false;
+        let currentMode = 'focus'; 
+        let focusTime = 25 * 60;
+        let breakTime = 5 * 60;
+        let timeLeft = focusTime;
+
+        let userData = { email: "", points: 0, sessions: 0, history: [] };
+
+        // Check if user is already logged in on page refresh
+        window.onload = function() {
+            let activeUser = localStorage.getItem('premium_user_session');
+            if(activeUser) {
+                loadUserData(activeUser);
+                showDashboard();
+            } else {
+                showAuthScreen();
+            }
+        };
+
+        // --- AUTH LOGIC ---
+        function executeAuth(type) {
+            const email = document.getElementById('authEmail').value.trim();
+            if(!email || !email.includes('@')) {
+                alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
+                return;
+            }
+
+            let cloudKey = 'premium_focus_' + btoa(email);
+            let savedData = localStorage.getItem(cloudKey);
+
+            if (type === 'login') {
+                if(savedData) {
+                    userData = JSON.parse(savedData);
+                    alert("🔄 සාර්ථකව සම්බන්ධ වුණා! ඔබේ පැරණි දත්ත සහ History නැවත ලබාගත්තා.");
+                } else {
+                    alert("❌ මේ Email එකෙන් ගිණුමක් සොයාගත නොහැක. කරුණාකර 'Create an Account' බටන් එක ඔබන්න.");
+                    return;
+                }
+            } else if (type === 'signup') {
+                if(savedData) {
+                    alert("⚠️ මේ Email එකෙන් දැනටමත් ගිණුමක් සදා ඇත. Sign In වෙන්න.");
+                    return;
+                } else {
+                    userData = { email: email, points: 0, sessions: 0, history: [] };
+                    alert("🌌 සාර්ථකව නව ගිණුමක් සෑදුවා! Focus Space එකට සාදරයෙන් පිළිගනිමු.");
+                }
+            }
+
+            localStorage.setItem('premium_user_session', email);
+            saveDataToCloud();
+            showDashboard();
+        }
+
+        function executeLogout() {
+            if(isRunning) { clearInterval(countdown); isRunning = false; }
+            localStorage.removeItem('premium_user_session');
+            userData = { email: "", points: 0, sessions: 0, history: [] };
+            document.getElementById('authEmail').value = "";
+            showAuthScreen();
+            alert("ගිණුමෙන් සාර්ථකව ඉවත් වුණා.");
+        }
+
+        function loadUserData(email) {
+            let cloudKey = 'premium_focus_' + btoa(email);
+            let data = localStorage.getItem(cloudKey);
+            if(data) userData = JSON.parse(data);
+            if(!userData.history) userData.history = [];
+        }
+
+        function saveDataToCloud() {
+            if(userData.email) {
+                let cloudKey = 'premium_focus_' + btoa(userData.email);
+                localStorage.setItem(cloudKey, JSON.stringify(userData));
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+            document.getElementById('userDisplayBadg').innerText = userData.email;
+            updateUI();
+        }
+
+        function showAuthScreen() {
+            document.getElementById('authScreen').style.display = 'block';
+            document.getElementById('mainDashboard').style.display = 'none';
+        }
+
+        // --- TIMER & UI LOGIC ---
+        function updateCustomTimes() {
+            if(isRunning) return;
+            focusTime = parseInt(document.getElementById('customFocus').value) * 60;
+            breakTime = parseInt(document.getElementById('customBreak').value) * 60;
+            timeLeft = (currentMode === 'focus') ? focusTime : breakTime;
+            displayTime();
+        }
+
+        function setMode(mode) {
+            if(isRunning) return;
+            currentMode = mode;
+            document.getElementById('focusModeBtn').classList.toggle('active', mode === 'focus');
+            document.getElementById('breakModeBtn').classList.toggle('active', mode === 'break');
+            timeLeft = (mode === 'focus') ? focusTime : breakTime;
+            displayTime();
+            document.getElementById('timerBtn').innerText = "Start Session";
+        }
+
+        function displayTime() {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timerBtn');
+            if (isRunning) {
+                clearInterval(countdown);
+                isRunning = false;
+                btn.innerText = "Resume";
+            } else {
+                isRunning = true;
+                btn.innerText = "Pause";
+                countdown = setInterval(() => {
+                    timeLeft--;
+                    displayTime();
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        isRunning = false;
+                        sessionCompleted();
+                    }
+                }, 1000);
+            }
+        }
+
+        function sessionCompleted() {
+            let currentTask = document.getElementById('taskTopic').value.trim() || "General Study";
+            let now = new Date();
+            let timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (currentMode === 'focus') {
+                userData.points += 100;
+                userData.sessions += 1;
+                userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
+                alert("🎉 නියමයි! ඔයා සාර්ථකව Focus Session එක අවසන් කළා. +100 Points!");
+                setMode('break');
+            } else {
+                userData.points += 20;
+                userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
+                alert("🥤 විවේකය අවසන්! දැන් නැවතත් ඊළඟ වැඩ කොටස පටන් ගමු. +20 Points!");
+                setMode('focus');
+            }
+            saveDataToCloud();
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('pointsDisplay').innerText = userData.points;
+            document.getElementById('sessionsDisplay').innerText = userData.sessions;
+            
+            const listContainer = document.getElementById('historyList');
+            if(userData.history.length === 0) {
+                listContainer.innerHTML = `<li style="font-size: 0.85em; color: var(--text-muted); text-align: center; padding-top: 10px;">තවම කිසිදු Session එකක් කර නැත.</li>`;
+            } else {
+                listContainer.innerHTML = userData.history.map(item => {
+                    let badgeColor = item.type === "Focus" ? "var(--accent-teal)" : "var(--accent-pink)";
+                    return `
+                        <li class="history-item">
+                            <span><b style="color:${badgeColor}">[${item.type}]</b> ${item.task}</span>
+                            <span class="history-date">${item.time}</span>
+                        </li>
+                    `;
+                }).join('');
+            }
+            displayTime();
+        }
+
+        function askAIForPlan() {
+            const topic = document.getElementById('taskTopic').value;
+            if(!topic.trim()) { alert("කරුණාකර වැඩේ නම liyanna!"); return; }
+            let totalMin = Math.floor(focusTime / 60);
+            let t1 = Math.floor(totalMin * 0.4);
+            let t2 = Math.floor(totalMin * 0.4);
+            let t3 = totalMin - (t1 + t2);
+            document.getElementById('aiSteps').innerHTML = `
+                • 🌌 <b>විනාඩි ${t1}:</b> '${topic}' පිළිබඳ න්‍යායාත්මක කරුණු ඉක්මනින් කියවන්න.<br>
+                • 📝 <b>විනාඩි ${t2}:</b> වැදගත් Points මතකයෙන් සටහන් කරගන්න.<br>
+                • 🎯 <b>විනාඩි ${t3}:</b> අදාළ ගැටලු 3ක් තනිවම විසඳා අවසන් කරන්න.
+            `;
+            document.getElementById('aiOutput').style.display = "block";
+        }
+    </script>
+</body>
+</html>
