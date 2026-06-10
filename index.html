@@ -68,6 +68,7 @@
             max-width: 360px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
             text-align: center;
+            display: block; /* Default visible until JS runs */
         }
 
         .dashboard-container {
@@ -107,7 +108,7 @@
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .stats-grid .stat-card { background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
         .stat-val { font-size: 1.4em; font-weight: bold; color: #fff; }
         .stat-label { font-size: 0.7em; color: #a4b5cf; text-transform: uppercase; }
 
@@ -212,7 +213,7 @@
     </div>
 
     <script>
-        // 🔐 ඔබේ සත්‍ය FIREBASE CONFIG විස්තර ඇතුළත් කර සකස් කරන ලදී
+        // 🔐 Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBHVmllLUiZtpphnIPuG84UIr3M1hSINdeQ",
             authDomain: "focus-5686f.firebaseapp.com",
@@ -222,7 +223,7 @@
             appId: "1:923352488085:web:00ec824c1761a30b17639c"
         };
         
-        // Initialize Firebase using compat mode
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -230,18 +231,20 @@
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeEmail = "";
         let userData = { points: 0, sessions: 0, history: [] };
+        let unsubscribeSnapshot = null;
 
-        // Auto Login System on load
-        window.onload = function() {
+        // Auto Login System on load - Fixed to ensure UI shifts immediately if user exists
+        window.addEventListener('DOMContentLoaded', () => {
             let savedUser = localStorage.getItem('squad_cloud_user');
-            if(savedUser) {
-                activeEmail = savedUser;
+            if(savedUser && savedUser.trim() !== "") {
+                activeEmail = savedUser.trim().toLowerCase();
                 document.getElementById('userDisplayBadg').innerText = activeEmail;
+                showDashboard(); // Instantly show dashboard to avoid flickering
                 loadDataFromCloud(activeEmail);
             } else {
                 showAuthScreen();
             }
-        };
+        });
 
         function checkEnterKey(event, type) {
             if (event.key === "Enter") {
@@ -262,16 +265,17 @@
             localStorage.setItem('squad_cloud_user', activeEmail);
             document.getElementById('userDisplayBadg').innerText = activeEmail;
             
-            // Generate a safe document reference ID
             let safeDocId = btoa(activeEmail).replace(/=/g, "");
             let userDocRef = db.collection('cloud_users').doc(safeDocId);
             
             userDocRef.get().then(doc => {
                 if(!doc.exists) {
                     userDocRef.set({ points: 0, sessions: 0, history: [] }).then(() => {
+                        showDashboard();
                         loadDataFromCloud(activeEmail);
                     });
                 } else {
+                    showDashboard();
                     loadDataFromCloud(activeEmail);
                 }
             }).catch(err => {
@@ -281,21 +285,25 @@
 
         function executeLogout() {
             if(isRunning) { clearInterval(countdown); isRunning = false; }
+            if(unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
             localStorage.removeItem('squad_cloud_user');
             activeEmail = "";
             document.getElementById('authEmail').value = "";
             showAuthScreen();
         }
 
-        // --- REALTIME SYNC (Cross-Device Cloud Data Fetching) ---
+        // --- REALTIME SYNC (Handles auto login stream correctly) ---
         function loadDataFromCloud(email) {
             let safeDocId = btoa(email).replace(/=/g, "");
-            db.collection('cloud_users').doc(safeDocId).onSnapshot(doc => {
+            
+            // Unsubscribe from previous snapshot if any
+            if(unsubscribeSnapshot) unsubscribeSnapshot();
+            
+            unsubscribeSnapshot = db.collection('cloud_users').doc(safeDocId).onSnapshot(doc => {
                 if(doc.exists) {
                     userData = doc.data();
                     if(!userData.history) userData.history = [];
                     updateUI();
-                    showDashboard();
                 }
             }, err => {
                 console.log("Snapshot error: " + err.message);
