@@ -41,6 +41,23 @@
             z-index: 0;
         }
 
+        /* App Logo Styling */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .app-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 20px rgba(189, 147, 249, 0.4);
+            background: #121420;
+        }
+
         /* --- Welcome / Auth Screen Component --- */
         .auth-screen-container {
             position: relative;
@@ -72,7 +89,7 @@
             max-width: 480px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
-            display: none; /* Hidden until login */
+            display: none;
             animation: fadeIn 0.8s ease;
         }
 
@@ -81,11 +98,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 10px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .sub-tag { color: #a4b5cf; font-size: 0.9em; margin-bottom: 25px; font-weight: 500; letter-spacing: 0.5px; }
+        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #8be9fd, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
+        h2 { font-size: 1.9em; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #ff79c6, #bd93f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; }
+        
+        .squad-tag { font-size: 1.05em; font-weight: bold; background: linear-gradient(to right, #ff79c6, #8be9fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 1px; }
 
-        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .stat-card { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03); }
         .stat-val { font-size: 1.6em; font-weight: bold; color: #fff; }
@@ -115,7 +132,6 @@
         .history-item { font-size: 0.85em; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
         .history-date { color: var(--text-muted); font-size: 0.8em; }
 
-        /* Top Nav inside dashboard */
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 14px; font-size: 0.85em; }
         .logout-btn { background: none; border: none; color: var(--accent-pink); cursor: pointer; font-weight: bold; }
     </style>
@@ -123,8 +139,11 @@
 <body>
 
     <div class="auth-screen-container" id="authScreen">
-        <h2>Welcome to Focus Space</h2>
-        <div class="sub-tag" style="margin-bottom:30px;">AL Science Squad 2028</div>
+        <div class="logo-container">
+            <img class="app-logo" src="https://raw.githubusercontent.com/someshimalka34927-spec/focus/main/photo_2026-06-02_10-22-04.jpg" alt="AL Science Squad Logo">
+        </div>
+        <h2>Focus Space</h2>
+        <div class="squad-tag">AL Science Squad 2028</div>
         
         <div style="text-align: left; margin-bottom: 20px;">
             <label>Email Address</label>
@@ -145,8 +164,12 @@
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
+        <div class="logo-container">
+            <img class="app-logo" src="https://raw.githubusercontent.com/someshimalka34927-spec/focus/main/photo_2026-06-02_10-22-04.jpg" alt="AL Science Squad Logo">
+        </div>
+
         <h1>AI Premium Focus</h1>
-        <div class="sub-tag">🌌 Master Your Focus Sessions</div>
+        <div class="squad-tag">AL Science Squad 2028</div>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -207,7 +230,6 @@
 
         let userData = { email: "", points: 0, sessions: 0, history: [] };
 
-        // Check if user is already logged in on page refresh
         window.onload = function() {
             let activeUser = localStorage.getItem('premium_user_session');
             if(activeUser) {
@@ -218,7 +240,6 @@
             }
         };
 
-        // --- AUTH LOGIC ---
         function executeAuth(type) {
             const email = document.getElementById('authEmail').value.trim();
             if(!email || !email.includes('@')) {
@@ -287,7 +308,6 @@
             document.getElementById('mainDashboard').style.display = 'none';
         }
 
-        // --- TIMER & UI LOGIC ---
         function updateCustomTimes() {
             if(isRunning) return;
             focusTime = parseInt(document.getElementById('customFocus').value) * 60;
@@ -312,6 +332,7 @@
             document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        // --- TIMER START/PAUSE ---
         function toggleTimer() {
             const btn = document.getElementById('timerBtn');
             if (isRunning) {
@@ -377,7 +398,7 @@
 
         function askAIForPlan() {
             const topic = document.getElementById('taskTopic').value;
-            if(!topic.trim()) { alert("කරුණාකර වැඩේ නම liyanna!"); return; }
+            if(!topic.trim()) { alert("කරුණාකර වැඩේ නම ලියන්න!"); return; }
             let totalMin = Math.floor(focusTime / 60);
             let t1 = Math.floor(totalMin * 0.4);
             let t2 = Math.floor(totalMin * 0.4);
