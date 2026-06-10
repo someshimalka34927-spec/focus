@@ -6,7 +6,6 @@
     <title>AI Premium Study Space - AL Science Squad</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
@@ -46,6 +45,7 @@
             z-index: 0;
         }
 
+        /* --- SImple Email Auth Screen --- */
         .auth-screen-container {
             position: relative;
             z-index: 2;
@@ -61,6 +61,7 @@
             text-align: center;
         }
 
+        /* --- Dashboard Container --- */
         .dashboard-container {
             position: relative;
             z-index: 1;
@@ -95,19 +96,6 @@
             font-weight: bold;
             margin-bottom: 15px;
             transition: 0.3s;
-        }
-
-        /* Google Button Styling */
-        .google-btn {
-            background: white !important;
-            color: #333 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: none;
-            font-weight: bold;
-            margin-top: 10px;
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -147,23 +135,14 @@
         
         <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Join Telegram Channel</a>
         
-        <div style="text-align: left; margin-bottom: 15px;">
-            <label style="font-size: 0.85em; color: #a4b5cf;">Email Address</label>
-            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email එක..." onkeydown="checkEnterKey(event, 'auth')">
-            
-            <label style="font-size: 0.85em; color: #a4b5cf; margin-top: 10px; display: block;">Password</label>
-            <input type="password" id="authPassword" class="custom-input" placeholder="මුරපදය..." onkeydown="checkEnterKey(event, 'auth')">
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label style="font-size: 0.85em; color: #a4b5cf; margin-left: 2px;">Enter Email Address</label>
+            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය..." style="margin-top: 6px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-            <button class="main-action-btn" onclick="loginWithEmail()">Sign In</button>
-            <button class="main-action-btn" onclick="signUpWithEmail()" style="background: transparent; border: 1px solid var(--accent-purple); color: var(--accent-purple);">Create an Account</button>
-            
-            <button class="main-action-btn google-btn" onclick="loginWithGoogle()">
-                <img src="https://g.atcdn.co/images/google-icon.svg" width="18" alt="Google"> Continue with Google
-            </button>
-        </div>
+        <button class="main-action-btn" onclick="executeCloudLogin()">Sign In / Enter Space</button>
     </div>
+
 
     <div class="dashboard-container" id="mainDashboard">
         <div class="dashboard-header">
@@ -227,7 +206,6 @@
 
     <script>
         // 🔴 ඔයාගේ FIREBASE CONFIG විස්තර ටික මෙතනට පේස්ට් කරන්න 🔴
-        // (Firebase Console -> Project Settings -> Web App එකක් ඇඩ් කරලා මේ ටික ගන්න)
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
@@ -239,75 +217,70 @@
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const db = firebase.firestore();
 
         let countdown, isRunning = false, currentMode = 'focus'; 
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
-        let currentUser = null;
+        let activeEmail = "";
         let userData = { points: 0, sessions: 0, history: [] };
 
-        // Auth State Listener (දැනටමත් ලොග් වෙලා ඉන්නවාදැයි නිතරම බලයි)
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('userDisplayBadg').innerText = user.email;
-                loadDataFromCloud(user.uid);
+        // Auto Login if session exists in browser
+        window.onload = function() {
+            let savedUser = localStorage.getItem('squad_cloud_user');
+            if(savedUser) {
+                activeEmail = savedUser;
+                document.getElementById('userDisplayBadg').innerText = activeEmail;
+                loadDataFromCloud(activeEmail);
             } else {
                 showAuthScreen();
             }
-        });
+        };
 
         function checkEnterKey(event, type) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                if (type === 'auth') loginWithEmail();
+                if (type === 'auth') executeCloudLogin();
                 if (type === 'task') askAIForPlan();
             }
         }
 
-        // --- EMAIL LOGIN & SIGN UP ---
-        function loginWithEmail() {
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
-            if(!email || !password) return alert("කරුණාකර සියල්ල පුරවන්න!");
+        // --- DIRECT EMAIL LOGIN & DB CHECK ---
+        function executeCloudLogin() {
+            const email = document.getElementById('authEmail').value.trim().toLowerCase();
+            if(!email || !email.includes('@')) {
+                return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
+            }
+
+            activeEmail = email;
+            localStorage.setItem('squad_cloud_user', activeEmail);
+            document.getElementById('userDisplayBadg').innerText = activeEmail;
             
-            auth.signInWithEmailAndPassword(email, password)
-                .catch(err => alert("ඇතුළත් කිරීම් වැරදියි: " + err.message));
-        }
-
-        function signUpWithEmail() {
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
-            if(password.length < 6) return alert("Password එකට අවම ලකුණු 6ක් ඕනේ!");
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(cred => {
-                    db.collection('users').doc(cred.user.uid).set({ points: 0, sessions: 0, history: [] });
-                    alert("ගිණුම සාර්ථකව සෑදුවා!");
-                }).catch(err => alert(err.message));
-        }
-
-        // --- GOOGLE LOGIN ---
-        function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).then(cred => {
-                db.collection('users').doc(cred.user.uid).get().then(doc => {
-                    if(!doc.exists) {
-                        db.collection('users').doc(cred.user.uid).set({ points: 0, sessions: 0, history: [] });
-                    }
-                });
-            }).catch(err => alert(err.message));
+            // Database එකේ මේ Email එකෙන් දැනටමත් කෙනෙක් ඉන්නවද බලනවා, නැත්නම් අලුතෙන් හදනවා
+            let userDocRef = db.collection('cloud_users').doc(btoa(activeEmail));
+            userDocRef.get().then(doc => {
+                if(!doc.exists) {
+                    // New User Create
+                    userDocRef.set({ points: 0, sessions: 0, history: [] }).then(() => {
+                        loadDataFromCloud(activeEmail);
+                    });
+                } else {
+                    // Existing User Load
+                    loadDataFromCloud(activeEmail);
+                }
+            }).catch(err => alert("Error connecting to cloud: " + err.message));
         }
 
         function executeLogout() {
             if(isRunning) { clearInterval(countdown); isRunning = false; }
-            auth.signOut();
+            localStorage.removeItem('squad_cloud_user');
+            activeEmail = "";
+            document.getElementById('authEmail').value = "";
+            showAuthScreen();
         }
 
-        // --- CLOUD FIRESTORE DATA SAVE & LOAD ---
-        function loadDataFromCloud(uid) {
-            db.collection('users').doc(uid).onSnapshot(doc => {
+        // --- REALTIME CLOUD SYNC ---
+        function loadDataFromCloud(email) {
+            db.collection('cloud_users').doc(btoa(email)).onSnapshot(doc => {
                 if(doc.exists) {
                     userData = doc.data();
                     if(!userData.history) userData.history = [];
@@ -318,12 +291,12 @@
         }
 
         function saveDataToCloud() {
-            if(currentUser) {
-                db.collection('users').doc(currentUser.uid).set(userData);
+            if(activeEmail) {
+                db.collection('cloud_users').doc(btoa(activeEmail)).set(userData);
             }
         }
 
-        // --- TIMER & UI FUNCTIONS ---
+        // --- TIMER & UI INTERFACES ---
         function showDashboard() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
