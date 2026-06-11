@@ -12,8 +12,8 @@
         :root {
             --bg-dark: #06070a;
             --card-bg: rgba(12, 15, 24, 0.9);
-            --accent-neon: #ffcc00; /* Logo Neon Yellow-Orange */
-            --accent-orange: #ff6600; /* Deep Neon Orange */
+            --accent-neon: #ffcc00; 
+            --accent-orange: #ff6600; 
             --text-main: #ffffff;
             --text-muted: #8fa0c2;
             --border-glow: 1px solid rgba(255, 204, 0, 0.2);
@@ -22,7 +22,6 @@
 
         body {
             background-color: var(--bg-dark);
-            /* Site Background එකට Neon Yellow/Orange Glow එකක් එකතු කරා */
             background-image: radial-gradient(circle at 50% 40%, rgba(255, 153, 0, 0.08) 0%, #050609 70%);
             color: var(--text-main);
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -148,112 +147,22 @@
         .ai-response { background: rgba(255, 204, 0, 0.02); border-left: 3px solid var(--accent-neon); padding: 12px; border-radius: 0 8px 8px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.01); border-right: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01); }
         .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
-        /* Timeline Chart Styles */
-        .chart-container {
-            background: #080a10;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-        
-        .chart-nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .week-title {
-            font-size: 0.9em;
-            font-weight: 800;
-            color: #000000;
-            background: var(--accent-neon);
-            padding: 4px 14px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
-        }
-        .nav-arrow-btn {
-            background: #11141d;
-            border: 1px solid rgba(255,255,255,0.05);
-            color: var(--accent-neon);
-            border-radius: 6px;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .nav-arrow-btn:hover {
-            background: var(--accent-neon);
-            color: #000000;
-        }
+        .chart-container { background: #080a10; border-radius: 16px; padding: 15px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
+        .chart-nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .week-title { font-size: 0.9em; font-weight: 800; color: #000000; background: var(--accent-neon); padding: 4px 14px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 10px rgba(255, 204, 0, 0.2); }
+        .nav-arrow-btn { background: #11141d; border: 1px solid rgba(255,255,255,0.05); color: var(--accent-neon); border-radius: 6px; width: 32px; height: 32px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .nav-arrow-btn:hover { background: var(--accent-neon); color: #000000; }
 
-        /* 📅 Month & Date Meta Banner */
-        .chart-meta-banner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 102, 0, 0.05);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 102, 0, 0.1);
-        }
+        .chart-meta-banner { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 102, 0, 0.05); padding: 6px 12px; border-radius: 8px; font-size: 0.75em; font-weight: bold; margin-bottom: 15px; border: 1px solid rgba(255, 102, 0, 0.1); }
         .meta-month { color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; }
         .meta-dates { color: #ffffff; letter-spacing: 0.5px; }
 
-        .chart-days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            align-items: flex-end;
-            height: 140px;
-            margin-top: 5px;
-        }
-        .chart-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-            justify-content: flex-end;
-        }
-        .chart-bar-wrapper {
-            background: rgba(255,255,255,0.01);
-            width: 100%;
-            height: 100px;
-            border-radius: 4px;
-            display: flex;
-            align-items: flex-end;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .chart-bar-fill {
-            background: linear-gradient(360deg, var(--accent-orange), var(--accent-neon));
-            width: 100%;
-            height: 0%; 
-            transition: height 0.6s ease;
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
-        }
-        .chart-day-label {
-            font-size: 0.65em;
-            color: var(--text-muted);
-            margin-top: 6px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .chart-hours-label {
-            font-size: 0.65em;
-            font-weight: bold;
-            color: var(--accent-neon);
-            margin-bottom: 2px;
-            white-space: nowrap;
-        }
+        .chart-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: flex-end; height: 140px; margin-top: 5px; }
+        .chart-column { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+        .chart-bar-wrapper { background: rgba(255,255,255,0.01); width: 100%; height: 100px; border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.02); }
+        .chart-bar-fill { background: linear-gradient(360deg, var(--accent-orange), var(--accent-neon)); width: 100%; height: 0%; transition: height 0.6s ease; border-radius: 2px; box-shadow: 0 0 10px rgba(255, 204, 0, 0.2); }
+        .chart-day-label { font-size: 0.65em; color: var(--text-muted); margin-top: 6px; font-weight: bold; text-transform: uppercase; }
+        .chart-hours-label { font-size: 0.65em; font-weight: bold; color: var(--accent-neon); margin-bottom: 2px; white-space: nowrap; }
 
         .history-box { background: #080a10; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
         .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
@@ -262,6 +171,11 @@
 
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #080a10; padding: 10px 14px; border-radius: 10px; font-size: 0.8em; border: 1px solid rgba(255,255,255,0.03); }
         .logout-btn { background: none; border: none; color: var(--accent-orange); cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.9em; }
+        
+        /* Stop Area Box */
+        .stop-container { display: flex; gap: 8px; margin-top: 10px; justify-content: center; }
+        .stop-btn { background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: var(--accent-orange); padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .stop-btn:hover { background: var(--accent-orange); color: black; box-shadow: 0 0 15px rgba(255, 102, 0, 0.3); }
     </style>
 </head>
 <body>
@@ -269,12 +183,10 @@
     <div class="auth-screen-container" id="authScreen">
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
-        
         <div style="text-align: left; margin-bottom: 25px;">
             <label style="font-size: 0.85em; color: var(--text-muted); margin-left: 2px;">Enter Username</label>
             <input type="text" id="authUsername" class="custom-input" placeholder="ඔබේ Username එක ඇතුළත් කරන්න..." style="margin-top: 6px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
-
         <button class="main-action-btn" onclick="executeCloudLogin()">Sign In / Enter Space</button>
     </div>
 
@@ -311,7 +223,10 @@
 
             <div class="timer-display-box">
                 <div class="time-digits" id="timer">25:00</div>
-                <button class="main-action-btn" id="timerBtn" onclick="toggleTimer()" style="width: auto; padding: 12px 40px; margin-top: 5px;">Start Session</button>
+                <div class="stop-container">
+                    <button class="main-action-btn" id="timerBtn" onclick="toggleTimer()" style="width: auto; padding: 12px 30px;">Start Session</button>
+                    <button class="stop-btn" id="stopBtn" onclick="manualStopSession()" style="display: none;">Stop</button>
+                </div>
             </div>
 
             <div class="inline-inputs">
@@ -335,24 +250,20 @@
                 <div style="font-weight: bold; color: var(--accent-neon); margin-bottom: 6px;">✨ AI Session Plan:</div>
                 <div id="aiSteps" style="color: #e0e0e0; line-height: 1.4;"></div>
             </div>
-            
             <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Join Telegram Channel</a>
         </div>
 
         <div id="chartsTabContent" class="tab-content">
-            
             <div class="chart-container">
                 <div class="chart-nav-header">
                     <button class="nav-arrow-btn" onclick="navigateWeek(-1)">◀</button>
                     <div class="week-title" id="weekTitleDisplay">Week 01</div>
                     <button class="nav-arrow-btn" onclick="navigateWeek(1)">▶</button>
                 </div>
-                
                 <div class="chart-meta-banner">
                     <span class="meta-month" id="metaMonthDisplay">MONTH: JUNE</span>
                     <span class="meta-dates" id="metaDatesDisplay">01 Jun - 07 Jun</span>
                 </div>
-                
                 <div class="chart-days-grid">
                     <div class="chart-column">
                         <div class="chart-hours-label" id="bar-mon-lbl">0m</div>
@@ -396,14 +307,11 @@
                 <div class="history-title">📊 Complete Project History:</div>
                 <ul class="history-list" id="historyList"></ul>
             </div>
-            
             <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Visit Telegram Squad</a>
         </div>
-
     </div>
 
     <script>
-        // 🔐 Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBHVmllLUiZtpphnIPuG84UIr3M1hSINdeQ",
             authDomain: "focus-5686f.firebaseapp.com",
@@ -420,13 +328,11 @@
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeUsername = ""; 
         
-        let userData = { 
-            points: 0, 
-            sessions: 0, 
-            history: [],
-            weeksData: {} 
-        };
-        
+        // Tracking variables for mid-session stops
+        let sessionStartTimeStamp = null; 
+        let initialConfiguredTime = focusTime;
+
+        let userData = { points: 0, sessions: 0, history: [], weeksData: {} };
         let currentViewingWeek = 1; 
         let unsubscribeSnapshot = null;
         let expectedEndTime = null;
@@ -445,22 +351,13 @@
         function calculateDatesForWeek(weekNumber) {
             let startOfTargetWeek = new Date(START_BASE_DATE.getTime());
             startOfTargetWeek.setDate(START_BASE_DATE.getDate() + ((weekNumber - 1) * 7));
-
             let endOfTargetWeek = new Date(startOfTargetWeek.getTime());
             endOfTargetWeek.setDate(startOfTargetWeek.getDate() + 6);
-
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             let monthLabel = monthNames[startOfTargetWeek.getMonth()];
-
-            let startDayStr = startOfTargetWeek.getDate().toString().padStart(2, '0');
-            let startMonthShort = startOfTargetWeek.toLocaleString('en-US', { month: 'short' });
-            
-            let endDayStr = endOfTargetWeek.getDate().toString().padStart(2, '0');
-            let endMonthShort = endOfTargetWeek.toLocaleString('en-US', { month: 'short' });
-
             return {
                 month: `📆 Month: ${monthLabel}`,
-                range: `${startDayStr} ${startMonthShort} - ${endDayStr} ${endMonthShort}`
+                range: `${startOfTargetWeek.getDate().toString().padStart(2, '0')} ${startOfTargetWeek.toLocaleString('en-US', { month: 'short' })} - ${endOfTargetWeek.getDate().toString().padStart(2, '0')} ${endOfTargetWeek.toLocaleString('en-US', { month: 'short' })}`
             };
         }
 
@@ -468,13 +365,28 @@
             currentViewingWeek = getSyllabusWeekNumber();
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser && savedUser.trim() !== "") {
-                activeUsername = savedUser.trim();
+                activeUsername = savedUser.trim().toLowerCase();
                 document.getElementById('userDisplayBadg').innerText = activeUsername;
                 showDashboard(); 
                 loadDataFromCloud(activeUsername);
             } else {
                 showAuthScreen();
             }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && isRunning && expectedEndTime) {
+                    let remainingMs = expectedEndTime - Date.now();
+                    timeLeft = Math.ceil(remainingMs / 1000);
+                    
+                    if (timeLeft <= 0) {
+                        isRunning = false;
+                        if(localTimerInterval) clearInterval(localTimerInterval);
+                        sessionCompleted(initialConfiguredTime / 60); 
+                    } else {
+                        displayTime();
+                    }
+                }
+            });
         });
 
         function switchTab(tabName) {
@@ -502,8 +414,7 @@
         function executeCloudLogin() {
             const username = document.getElementById('authUsername').value.trim();
             if(!username) return alert("කරුණාකර වලංගු Username එකක් ඇතුළත් කරන්න!");
-
-            activeUsername = username;
+            activeUsername = username.toLowerCase();
             localStorage.setItem('squad_cloud_user', activeUsername);
             document.getElementById('userDisplayBadg').innerText = activeUsername;
             
@@ -533,7 +444,8 @@
         }
 
         function loadDataFromCloud(username) {
-            let safeDocId = btoa(encodeURIComponent(username)).replace(/=/g, "");
+            let cleanUsername = username.toLowerCase();
+            let safeDocId = btoa(encodeURIComponent(cleanUsername)).replace(/=/g, "");
             if(unsubscribeSnapshot) unsubscribeSnapshot();
             
             unsubscribeSnapshot = db.collection('cloud_users').doc(safeDocId).onSnapshot(doc => {
@@ -555,7 +467,8 @@
 
         function saveDataToCloud() {
             if(activeUsername) {
-                let safeDocId = btoa(encodeURIComponent(activeUsername)).replace(/=/g, "");
+                let cleanUsername = activeUsername.toLowerCase();
+                let safeDocId = btoa(encodeURIComponent(cleanUsername)).replace(/=/g, "");
                 db.collection('cloud_users').doc(safeDocId).set(userData).catch(err => console.log(err));
             }
         }
@@ -592,6 +505,7 @@
             timeLeft = (mode === 'focus') ? focusTime : breakTime;
             displayTime();
             document.getElementById('timerBtn').innerText = "Start Session";
+            document.getElementById('stopBtn').style.display = 'none';
         }
 
         function displayTime() {
@@ -602,12 +516,24 @@
 
         function toggleTimer() {
             const btn = document.getElementById('timerBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
             if (isRunning) {
                 stopTimerSystem();
                 btn.innerText = "Resume";
             } else {
                 isRunning = true;
                 btn.innerText = "Pause";
+                
+                if (currentMode === 'focus' && !sessionStartTimeStamp) {
+                    sessionStartTimeStamp = Date.now();
+                    initialConfiguredTime = timeLeft; 
+                }
+                
+                if (currentMode === 'focus') {
+                    stopBtn.style.display = 'inline-block';
+                }
+
                 expectedEndTime = Date.now() + (timeLeft * 1000);
                 
                 localTimerInterval = setInterval(() => {
@@ -627,20 +553,38 @@
             if(localTimerInterval) clearInterval(localTimerInterval);
         }
 
+        function manualStopSession() {
+            if (!sessionStartTimeStamp) return;
+            
+            // දැනට කොච්චර වෙලාවක් වැඩ කරලද කියලා තත්පර වලින් බලනවා
+            let elapsedSeconds = Math.floor((Date.now() - sessionStartTimeStamp) / 1000);
+            let elapsedMinutes = Math.floor(elapsedSeconds / 60);
+
+            if (elapsedMinutes < 10) {
+                alert(`⚠️ Points ලැබීමට නම් අවම වශයෙන් විනාඩි 10ක් සම්පූර්ණ විය යුතුය! (ඔයා තවම වැඩ කරේ විනාඩි ${elapsedMinutes} යි)`);
+                return;
+            }
+
+            let confirmStop = confirm(`📊 ඔයා විනාඩි ${elapsedMinutes} ක් වැඩ කරලා තියෙනවා. සෙෂන් එක නතර කරලා Points ටික එකතු කරගන්නද?`);
+            if (confirmStop) {
+                stopTimerSystem();
+                sessionCompleted(elapsedMinutes); 
+            }
+        }
+
         function handleTimerCompletion() {
             isRunning = false;
             if(localTimerInterval) clearInterval(localTimerInterval);
-            sessionCompleted();
+            sessionCompleted(initialConfiguredTime / 60); 
         }
 
-        function sessionCompleted() {
+        function sessionCompleted(minutesToEarn) {
             let currentTask = document.getElementById('taskTopic').value.trim() || "General Study";
             let now = new Date();
             let timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
             if (currentMode === 'focus') {
-                let totalMinutesAllocated = Math.floor(focusTime / 60);
-                userData.points += totalMinutesAllocated;
+                userData.points += minutesToEarn;
                 userData.sessions += 1;
                 
                 let currentWeekKey = "week_" + getSyllabusWeekNumber();
@@ -651,13 +595,17 @@
                 let dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
                 let currentDayName = dayNames[now.getDay()];
                 
-                userData.weeksData[currentWeekKey][currentDayName] = (userData.weeksData[currentWeekKey][currentDayName] || 0) + totalMinutesAllocated;
-                userData.history.unshift({ task: currentTask, type: "Focus", time: timeString + ` (W${getSyllabusWeekNumber()})` });
+                userData.weeksData[currentWeekKey][currentDayName] = (userData.weeksData[currentWeekKey][currentDayName] || 0) + minutesToEarn;
+                userData.history.unshift({ task: currentTask + ` (${minutesToEarn}m Done)`, type: "Focus", time: timeString + ` (W${getSyllabusWeekNumber()})` });
                 
-                alert(`🎉 සාර්ථකයි! Week 0${getSyllabusWeekNumber()} චාර්ට් එකට විනාඩි ${totalMinutesAllocated} ක් එකතු වුණා.`);
+                alert(`🎉 සාර්ථකයි! ඔයාගේ සෙෂන් එකෙන් විනාඩි ${minutesToEarn} ක Points චාර්ට් එකට එකතු වුණා.`);
+                
+                // Reset session tracking timestamps
+                sessionStartTimeStamp = null;
                 setMode('break');
             } else {
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
+                sessionStartTimeStamp = null;
                 setMode('focus');
             }
             saveDataToCloud();
@@ -665,20 +613,15 @@
 
         function renderWeeklyChart() {
             document.getElementById('weekTitleDisplay').innerText = "Week " + (currentViewingWeek < 10 ? "0" + currentViewingWeek : currentViewingWeek);
-            
             let metaInfo = calculateDatesForWeek(currentViewingWeek);
             document.getElementById('metaMonthDisplay').innerText = metaInfo.month;
             document.getElementById('metaDatesDisplay').innerText = metaInfo.range;
 
             let weekKey = "week_" + currentViewingWeek;
             let targetWeekData = userData.weeksData[weekKey] || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
-
             const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
             let maxMinutes = 0;
-            
-            keys.forEach(day => {
-                if(targetWeekData[day] > maxMinutes) maxMinutes = targetWeekData[day];
-            });
+            keys.forEach(day => { if(targetWeekData[day] > maxMinutes) maxMinutes = targetWeekData[day]; });
             if(maxMinutes < 30) maxMinutes = 30; 
 
             keys.forEach(day => {
@@ -692,7 +635,6 @@
         function updateUI() {
             document.getElementById('pointsDisplay').innerText = userData.points;
             document.getElementById('sessionsDisplay').innerText = userData.sessions;
-            
             const listContainer = document.getElementById('historyList');
             if(userData.history.length === 0) {
                 listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Projects කර නැත.</li>`;
