@@ -161,7 +161,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         .week-title {
             font-size: 0.9em;
@@ -189,6 +189,22 @@
             background: var(--accent-cyan);
             color: #000000;
         }
+
+        /* 📅 Month & Date Meta Banner */
+        .chart-meta-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(189, 147, 249, 0.05);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid rgba(189, 147, 249, 0.1);
+        }
+        .meta-month { color: var(--accent-purple); text-transform: uppercase; letter-spacing: 1px; }
+        .meta-dates { color: #ffffff; letter-spacing: 0.5px; }
 
         .chart-days-grid {
             display: grid;
@@ -332,6 +348,11 @@
                     <button class="nav-arrow-btn" onclick="navigateWeek(1)">▶</button>
                 </div>
                 
+                <div class="chart-meta-banner">
+                    <span class="meta-month" id="metaMonthDisplay">MONTH: JUNE</span>
+                    <span class="meta-dates" id="metaDatesDisplay">01 Jun - 07 Jun</span>
+                </div>
+                
                 <div class="chart-days-grid">
                     <div class="chart-column">
                         <div class="chart-hours-label" id="bar-mon-lbl">0m</div>
@@ -411,14 +432,40 @@
         let expectedEndTime = null;
         let localTimerInterval = null;
 
-        // 🧠 Automatic Week Tracking Formula
+        // 📅 Core Calendar Configuration starting from June 1st, 2026
+        const START_BASE_DATE = new Date("2026-06-01");
+
         function getSyllabusWeekNumber() {
-            const baseDate = new Date("2026-06-01"); 
             const today = new Date();
-            const timeDiff = today.getTime() - baseDate.getTime();
+            const timeDiff = today.getTime() - START_BASE_DATE.getTime();
             const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
             let weekNum = Math.floor(daysDiff / 7) + 1;
             return weekNum > 0 ? weekNum : 1;
+        }
+
+        // 🧠 Dynamic Date and Month Range Calculator based on Week Number
+        function calculateDatesForWeek(weekNumber) {
+            let startOfTargetWeek = new Date(START_BASE_DATE.getTime());
+            startOfTargetWeek.setDate(START_BASE_DATE.getDate() + ((weekNumber - 1) * 7));
+
+            let endOfTargetWeek = new Date(startOfTargetWeek.getTime());
+            endOfTargetWeek.setDate(startOfTargetWeek.getDate() + 6);
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            // Get Month name from the week's starting date
+            let monthLabel = monthNames[startOfTargetWeek.getMonth()];
+
+            let startDayStr = startOfTargetWeek.getDate().toString().padStart(2, '0');
+            let startMonthShort = startOfTargetWeek.toLocaleString('en-US', { month: 'short' });
+            
+            let endDayStr = endOfTargetWeek.getDate().toString().padStart(2, '0');
+            let endMonthShort = endOfTargetWeek.toLocaleString('en-US', { month: 'short' });
+
+            return {
+                month: `📆 Month: ${monthLabel}`,
+                range: `${startDayStr} ${startMonthShort} - ${endDayStr} ${endMonthShort}`
+            };
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -434,7 +481,6 @@
             }
         });
 
-        // 🛠️ Parameterized Switch Tab Function
         function switchTab(tabName) {
             document.getElementById('timerTabContent').classList.toggle('active', tabName === 'timer');
             document.getElementById('chartsTabContent').classList.toggle('active', tabName === 'charts');
@@ -443,7 +489,6 @@
             if(tabName === 'charts') renderWeeklyChart();
         }
 
-        // 🛠️ Parameterized Week Navigation
         function navigateWeek(direction) {
             currentViewingWeek += direction;
             if(currentViewingWeek < 1) currentViewingWeek = 1;
@@ -551,7 +596,6 @@
             displayTime();
         }
 
-        // 🛠️ Parameterized Mode Setter Function
         function setMode(mode) {
             if(isRunning) return;
             currentMode = mode;
@@ -632,8 +676,14 @@
         }
 
         function renderWeeklyChart() {
+            // Update Main Week Title Badge
             document.getElementById('weekTitleDisplay').innerText = "Week " + (currentViewingWeek < 10 ? "0" + currentViewingWeek : currentViewingWeek);
             
+            // 📅 Update Meta Month and Dynamic Date Banner Data
+            let metaInfo = calculateDatesForWeek(currentViewingWeek);
+            document.getElementById('metaMonthDisplay').innerText = metaInfo.month;
+            document.getElementById('metaDatesDisplay').innerText = metaInfo.range;
+
             let weekKey = "week_" + currentViewingWeek;
             let targetWeekData = userData.weeksData[weekKey] || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
 
