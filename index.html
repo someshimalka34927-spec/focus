@@ -12,13 +12,12 @@
         :root {
             --bg-dark: #07080d;
             --card-bg: rgba(13, 16, 27, 0.85);
-            --accent-gold: #ffaa00; /* Neon Gold/Orange (Light Blue වෙනුවට) */
+            --accent-pink: #ff007f; /* Electric Pink (ප්‍රධාන පාට) */
             --accent-purple: #bd93f9; /* Cyber Purple */
-            --accent-pink: #ff007f; /* Electric Pink */
             --text-main: #ffffff;
             --text-muted: #7e89a3;
-            --border-glow: 1px solid rgba(255, 170, 0, 0.15);
-            --btn-gradient: linear-gradient(90deg, #bd93f9, #ffaa00);
+            --border-glow: 1px solid rgba(255, 0, 127, 0.15);
+            --btn-gradient: linear-gradient(90deg, #bd93f9, #ff007f);
         }
 
         body {
@@ -47,7 +46,7 @@
             border-radius: 20px;
             width: 100%;
             max-width: 360px;
-            box-shadow: 0 0 40px rgba(255, 170, 0, 0.1);
+            box-shadow: 0 0 40px rgba(255, 0, 127, 0.1);
             text-align: center;
             display: block;
         }
@@ -90,16 +89,16 @@
         }
         .tab-trigger.active {
             background: var(--btn-gradient);
-            color: #000000;
+            color: #ffffff;
             font-weight: 800;
-            box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
         }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        h1 { font-size: 2em; font-weight: 900; margin-bottom: 4px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; color: var(--accent-gold); margin-top: 5px; text-transform: uppercase; }
+        h1 { font-size: 2em; font-weight: 900; margin-bottom: 4px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; color: var(--accent-pink); margin-top: 5px; text-transform: uppercase; }
         .squad-tag { font-size: 0.95em; font-weight: bold; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 20px; }
 
         .tg-link-btn {
@@ -108,7 +107,7 @@
             justify-content: center;
             gap: 6px;
             background: #090b11;
-            color: var(--accent-gold);
+            color: var(--accent-pink);
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -117,35 +116,35 @@
             margin-top: 15px;
             margin-bottom: 10px;
             transition: 0.3s;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.05);
+            border: 1px solid var(--accent-pink);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.05);
         }
         .tg-link-btn:hover {
-            background: var(--accent-gold);
-            color: #000000;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+            background: var(--accent-pink);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
         .stats-grid .stat-card { background: #090b11; padding: 15px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .stat-val { font-size: 1.6em; font-weight: bold; color: var(--accent-gold); }
+        .stat-val { font-size: 1.6em; font-weight: bold; color: var(--accent-pink); }
         .stat-label { font-size: 0.7em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
         .mode-selectors { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
         .mode-btn { background: #090b11; border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; }
-        .mode-btn.active { background: rgba(255, 170, 0, 0.08); color: var(--accent-gold); border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 170, 0, 0.15); }
+        .mode-btn.active { background: rgba(255, 0, 127, 0.08); color: var(--accent-pink); border-color: var(--accent-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.15); }
 
         .timer-display-box { margin-bottom: 25px; background: #090b11; padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.02); }
         .time-digits { font-size: 4.5em; font-weight: 800; color: #ffffff; font-family: monospace; letter-spacing: -2px; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
         
-        .main-action-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 35px; border-radius: 8px; font-weight: 800; font-size: 0.95em; cursor: pointer; width: 100%; box-sizing: border-box; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .main-action-btn:hover { box-shadow: 0 0 20px rgba(255, 170, 0, 0.3); }
+        .main-action-btn { background: var(--btn-gradient); color: #ffffff; border: none; padding: 14px 35px; border-radius: 8px; font-weight: 800; font-size: 0.95em; cursor: pointer; width: 100%; box-sizing: border-box; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .main-action-btn:hover { box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
 
         .input-wrapper { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-top: 25px; }
         .custom-input { padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); background: #090b11; color: white; font-size: 0.9em; outline: none; width: 100%; box-sizing: border-box; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 170, 0, 0.1); }
+        .custom-input:focus { border-color: var(--accent-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.1); }
 
-        .ai-response { background: rgba(255, 170, 0, 0.02); border-left: 3px solid var(--accent-gold); padding: 12px; border-radius: 0 8px 8px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.01); border-right: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01); }
+        .ai-response { background: rgba(255, 0, 127, 0.02); border-left: 3px solid var(--accent-pink); padding: 12px; border-radius: 0 8px 8px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.01); border-right: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01); }
         .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
         /* Timeline Chart Styles */
@@ -166,18 +165,18 @@
         .week-title {
             font-size: 0.9em;
             font-weight: 800;
-            color: #000000;
-            background: var(--accent-gold);
+            color: #ffffff;
+            background: var(--accent-pink);
             padding: 4px 14px;
             border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
         }
         .nav-arrow-btn {
             background: #131722;
             border: 1px solid rgba(255,255,255,0.05);
-            color: var(--accent-gold);
+            color: var(--accent-pink);
             border-radius: 6px;
             width: 32px;
             height: 32px;
@@ -186,8 +185,8 @@
             transition: 0.2s;
         }
         .nav-arrow-btn:hover {
-            background: var(--accent-gold);
-            color: #000000;
+            background: var(--accent-pink);
+            color: #ffffff;
         }
 
         /* 📅 Month & Date Meta Banner */
@@ -233,12 +232,12 @@
             border: 1px solid rgba(255,255,255,0.02);
         }
         .chart-bar-fill {
-            background: linear-gradient(360deg, var(--accent-purple), var(--accent-gold));
+            background: linear-gradient(360deg, var(--accent-purple), var(--accent-pink));
             width: 100%;
             height: 0%; 
             transition: height 0.6s ease;
             border-radius: 2px;
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
         }
         .chart-day-label {
             font-size: 0.65em;
@@ -250,7 +249,7 @@
         .chart-hours-label {
             font-size: 0.65em;
             font-weight: bold;
-            color: var(--accent-gold);
+            color: var(--accent-pink);
             margin-bottom: 2px;
             white-space: nowrap;
         }
@@ -280,7 +279,7 @@
 
     <div class="dashboard-container" id="mainDashboard">
         <div class="dashboard-header">
-            <span>⚡ USER: <b style="color: var(--accent-gold);" id="userDisplayBadg">...</b></span>
+            <span>⚡ USER: <b style="color: var(--accent-pink);" id="userDisplayBadg">...</b></span>
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
@@ -328,11 +327,11 @@
             <div class="input-wrapper">
                 <label style="font-size:0.8em; color:var(--text-muted);">🎯 කරන්න යන Project එක / වැඩ කොටස:</label>
                 <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ" onkeydown="checkEnterKey(event, 'task')">
-                <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 8px; background: #090b11; color: var(--accent-gold); border: 1px solid rgba(255, 170, 0, 0.2);">AI Smart Plan</button>
+                <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 8px; background: #090b11; color: var(--accent-pink); border: 1px solid rgba(255, 0, 127, 0.2);">AI Smart Plan</button>
             </div>
 
             <div class="ai-response" id="aiOutput">
-                <div style="font-weight: bold; color: var(--accent-gold); margin-bottom: 6px;">✨ AI Session Plan:</div>
+                <div style="font-weight: bold; color: var(--accent-pink); margin-bottom: 6px;">✨ AI Session Plan:</div>
                 <div id="aiSteps" style="color: #e0e0e0; line-height: 1.4;"></div>
             </div>
             
@@ -707,7 +706,7 @@
                 listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Projects කර නැත.</li>`;
             } else {
                 listContainer.innerHTML = userData.history.map(item => {
-                    let badgeColor = item.type === "Focus" ? "var(--accent-gold)" : "var(--accent-pink)";
+                    let badgeColor = item.type === "Focus" ? "var(--accent-pink)" : "var(--accent-purple)";
                     return `<li class="history-item"><span><b style="color:${badgeColor}">[${item.type}]</b> ${item.task}</span><span>${item.time}</span></li>`;
                 }).join('');
             }
