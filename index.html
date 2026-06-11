@@ -10,19 +10,20 @@
 
     <style>
         :root {
-            --bg-dark: #07080d;
-            --card-bg: rgba(13, 16, 27, 0.85);
-            --accent-pink: #ff007f; /* Electric Pink (ප්‍රධාන පාට) */
-            --accent-purple: #bd93f9; /* Cyber Purple */
+            --bg-dark: #06070a;
+            --card-bg: rgba(12, 15, 24, 0.9);
+            --accent-neon: #ffcc00; /* Logo Neon Yellow-Orange */
+            --accent-orange: #ff6600; /* Deep Neon Orange */
             --text-main: #ffffff;
-            --text-muted: #7e89a3;
-            --border-glow: 1px solid rgba(255, 0, 127, 0.15);
-            --btn-gradient: linear-gradient(90deg, #bd93f9, #ff007f);
+            --text-muted: #8fa0c2;
+            --border-glow: 1px solid rgba(255, 204, 0, 0.2);
+            --btn-gradient: linear-gradient(90deg, #ffcc00, #ff6600);
         }
 
         body {
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 50%, #121829 0%, #040509 100%);
+            /* Site Background එකට Neon Yellow/Orange Glow එකක් එකතු කරා */
+            background-image: radial-gradient(circle at 50% 40%, rgba(255, 153, 0, 0.08) 0%, #050609 70%);
             color: var(--text-main);
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
@@ -38,7 +39,7 @@
         .auth-screen-container {
             position: relative;
             z-index: 2;
-            background: rgba(10, 12, 22, 0.9);
+            background: rgba(10, 12, 18, 0.95);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border: var(--border-glow);
@@ -46,7 +47,7 @@
             border-radius: 20px;
             width: 100%;
             max-width: 360px;
-            box-shadow: 0 0 40px rgba(255, 0, 127, 0.1);
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.08);
             text-align: center;
             display: block;
         }
@@ -62,7 +63,7 @@
             border-radius: 20px;
             width: 100%;
             max-width: 430px;
-            box-shadow: 0 0 50px rgba(189, 147, 249, 0.08);
+            box-shadow: 0 0 50px rgba(255, 102, 0, 0.05);
             text-align: center;
             display: none;
         }
@@ -89,16 +90,16 @@
         }
         .tab-trigger.active {
             background: var(--btn-gradient);
-            color: #ffffff;
+            color: #000000;
             font-weight: 800;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
         }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        h1 { font-size: 2em; font-weight: 900; margin-bottom: 4px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; color: var(--accent-pink); margin-top: 5px; text-transform: uppercase; }
+        h1 { font-size: 2em; font-weight: 900; margin-bottom: 4px; background: linear-gradient(90deg, var(--accent-neon), var(--accent-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 4px; color: var(--accent-neon); margin-top: 5px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255, 204, 0, 0.2); }
         .squad-tag { font-size: 0.95em; font-weight: bold; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 20px; }
 
         .tg-link-btn {
@@ -107,7 +108,7 @@
             justify-content: center;
             gap: 6px;
             background: #090b11;
-            color: var(--accent-pink);
+            color: var(--accent-neon);
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -116,40 +117,40 @@
             margin-top: 15px;
             margin-bottom: 10px;
             transition: 0.3s;
-            border: 1px solid var(--accent-pink);
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.05);
+            border: 1px solid var(--accent-neon);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.05);
         }
         .tg-link-btn:hover {
-            background: var(--accent-pink);
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+            background: var(--accent-neon);
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .stats-grid .stat-card { background: #090b11; padding: 15px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .stat-val { font-size: 1.6em; font-weight: bold; color: var(--accent-pink); }
+        .stats-grid .stat-card { background: #080a10; padding: 15px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .stat-val { font-size: 1.6em; font-weight: bold; color: var(--accent-neon); text-shadow: 0 0 8px rgba(255, 204, 0, 0.2); }
         .stat-label { font-size: 0.7em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
         .mode-selectors { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
         .mode-btn { background: #090b11; border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; }
-        .mode-btn.active { background: rgba(255, 0, 127, 0.08); color: var(--accent-pink); border-color: var(--accent-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.15); }
+        .mode-btn.active { background: rgba(255, 204, 0, 0.08); color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 10px rgba(255, 204, 0, 0.15); }
 
-        .timer-display-box { margin-bottom: 25px; background: #090b11; padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.02); }
+        .timer-display-box { margin-bottom: 25px; background: #080a10; padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.02); }
         .time-digits { font-size: 4.5em; font-weight: 800; color: #ffffff; font-family: monospace; letter-spacing: -2px; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
         
-        .main-action-btn { background: var(--btn-gradient); color: #ffffff; border: none; padding: 14px 35px; border-radius: 8px; font-weight: 800; font-size: 0.95em; cursor: pointer; width: 100%; box-sizing: border-box; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .main-action-btn:hover { box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
+        .main-action-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 35px; border-radius: 8px; font-weight: 800; font-size: 0.95em; cursor: pointer; width: 100%; box-sizing: border-box; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .main-action-btn:hover { box-shadow: 0 0 20px rgba(255, 102, 0, 0.4); }
 
         .input-wrapper { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-top: 25px; }
-        .custom-input { padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); background: #090b11; color: white; font-size: 0.9em; outline: none; width: 100%; box-sizing: border-box; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--accent-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.1); }
+        .custom-input { padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); background: #080a10; color: white; font-size: 0.9em; outline: none; width: 100%; box-sizing: border-box; transition: 0.3s; }
+        .custom-input:focus { border-color: var(--accent-neon); box-shadow: 0 0 10px rgba(255, 204, 0, 0.15); }
 
-        .ai-response { background: rgba(255, 0, 127, 0.02); border-left: 3px solid var(--accent-pink); padding: 12px; border-radius: 0 8px 8px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.01); border-right: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01); }
+        .ai-response { background: rgba(255, 204, 0, 0.02); border-left: 3px solid var(--accent-neon); padding: 12px; border-radius: 0 8px 8px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.01); border-right: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01); }
         .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
         /* Timeline Chart Styles */
         .chart-container {
-            background: #090b11;
+            background: #080a10;
             border-radius: 16px;
             padding: 15px;
             margin-bottom: 25px;
@@ -165,18 +166,18 @@
         .week-title {
             font-size: 0.9em;
             font-weight: 800;
-            color: #ffffff;
-            background: var(--accent-pink);
+            color: #000000;
+            background: var(--accent-neon);
             padding: 4px 14px;
             border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
         }
         .nav-arrow-btn {
-            background: #131722;
+            background: #11141d;
             border: 1px solid rgba(255,255,255,0.05);
-            color: var(--accent-pink);
+            color: var(--accent-neon);
             border-radius: 6px;
             width: 32px;
             height: 32px;
@@ -185,8 +186,8 @@
             transition: 0.2s;
         }
         .nav-arrow-btn:hover {
-            background: var(--accent-pink);
-            color: #ffffff;
+            background: var(--accent-neon);
+            color: #000000;
         }
 
         /* 📅 Month & Date Meta Banner */
@@ -194,15 +195,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(189, 147, 249, 0.05);
+            background: rgba(255, 102, 0, 0.05);
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.75em;
             font-weight: bold;
             margin-bottom: 15px;
-            border: 1px solid rgba(189, 147, 249, 0.1);
+            border: 1px solid rgba(255, 102, 0, 0.1);
         }
-        .meta-month { color: var(--accent-purple); text-transform: uppercase; letter-spacing: 1px; }
+        .meta-month { color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; }
         .meta-dates { color: #ffffff; letter-spacing: 0.5px; }
 
         .chart-days-grid {
@@ -232,12 +233,12 @@
             border: 1px solid rgba(255,255,255,0.02);
         }
         .chart-bar-fill {
-            background: linear-gradient(360deg, var(--accent-purple), var(--accent-pink));
+            background: linear-gradient(360deg, var(--accent-orange), var(--accent-neon));
             width: 100%;
             height: 0%; 
             transition: height 0.6s ease;
             border-radius: 2px;
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
         }
         .chart-day-label {
             font-size: 0.65em;
@@ -249,18 +250,18 @@
         .chart-hours-label {
             font-size: 0.65em;
             font-weight: bold;
-            color: var(--accent-pink);
+            color: var(--accent-neon);
             margin-bottom: 2px;
             white-space: nowrap;
         }
 
-        .history-box { background: #090b11; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
-        .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-purple); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        .history-box { background: #080a10; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
+        .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
         .history-list { max-height: 180px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
         .history-item { font-size: 0.8em; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #d1d5db; }
 
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #090b11; padding: 10px 14px; border-radius: 10px; font-size: 0.8em; border: 1px solid rgba(255,255,255,0.03); }
-        .logout-btn { background: none; border: none; color: var(--accent-pink); cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.9em; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #080a10; padding: 10px 14px; border-radius: 10px; font-size: 0.8em; border: 1px solid rgba(255,255,255,0.03); }
+        .logout-btn { background: none; border: none; color: var(--accent-orange); cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -270,8 +271,8 @@
         <div class="squad-tag">AL Science Squad 2028</div>
         
         <div style="text-align: left; margin-bottom: 25px;">
-            <label style="font-size: 0.85em; color: var(--text-muted); margin-left: 2px;">Enter Email Address</label>
-            <input type="email" id="authEmail" class="custom-input" placeholder="ඔබේ Email ලිපිනය..." style="margin-top: 6px;" onkeydown="checkEnterKey(event, 'auth')">
+            <label style="font-size: 0.85em; color: var(--text-muted); margin-left: 2px;">Enter Username</label>
+            <input type="text" id="authUsername" class="custom-input" placeholder="ඔබේ Username එක ඇතුළත් කරන්න..." style="margin-top: 6px;" onkeydown="checkEnterKey(event, 'auth')">
         </div>
 
         <button class="main-action-btn" onclick="executeCloudLogin()">Sign In / Enter Space</button>
@@ -279,7 +280,7 @@
 
     <div class="dashboard-container" id="mainDashboard">
         <div class="dashboard-header">
-            <span>⚡ USER: <b style="color: var(--accent-pink);" id="userDisplayBadg">...</b></span>
+            <span>⚡ USER: <b style="color: var(--accent-neon);" id="userDisplayBadg">...</b></span>
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
@@ -327,11 +328,11 @@
             <div class="input-wrapper">
                 <label style="font-size:0.8em; color:var(--text-muted);">🎯 කරන්න යන Project එක / වැඩ කොටස:</label>
                 <input type="text" id="taskTopic" class="custom-input" placeholder="E.g., Physics Mechanics MCQ" onkeydown="checkEnterKey(event, 'task')">
-                <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 8px; background: #090b11; color: var(--accent-pink); border: 1px solid rgba(255, 0, 127, 0.2);">AI Smart Plan</button>
+                <button class="main-action-btn" onclick="askAIForPlan()" style="margin-top: 8px; background: #090b11; color: var(--accent-neon); border: 1px solid rgba(255, 204, 0, 0.25);">AI Smart Plan</button>
             </div>
 
             <div class="ai-response" id="aiOutput">
-                <div style="font-weight: bold; color: var(--accent-pink); margin-bottom: 6px;">✨ AI Session Plan:</div>
+                <div style="font-weight: bold; color: var(--accent-neon); margin-bottom: 6px;">✨ AI Session Plan:</div>
                 <div id="aiSteps" style="color: #e0e0e0; line-height: 1.4;"></div>
             </div>
             
@@ -417,7 +418,7 @@
 
         let isRunning = false, currentMode = 'focus'; 
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
-        let activeEmail = "";
+        let activeUsername = ""; 
         
         let userData = { 
             points: 0, 
@@ -431,7 +432,6 @@
         let expectedEndTime = null;
         let localTimerInterval = null;
 
-        // 📅 Core Calendar Configuration starting from June 1st, 2026
         const START_BASE_DATE = new Date("2026-06-01");
 
         function getSyllabusWeekNumber() {
@@ -468,10 +468,10 @@
             currentViewingWeek = getSyllabusWeekNumber();
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser && savedUser.trim() !== "") {
-                activeEmail = savedUser.trim().toLowerCase();
-                document.getElementById('userDisplayBadg').innerText = activeEmail;
+                activeUsername = savedUser.trim();
+                document.getElementById('userDisplayBadg').innerText = activeUsername;
                 showDashboard(); 
-                loadDataFromCloud(activeEmail);
+                loadDataFromCloud(activeUsername);
             } else {
                 showAuthScreen();
             }
@@ -500,25 +500,25 @@
         }
 
         function executeCloudLogin() {
-            const email = document.getElementById('authEmail').value.trim().toLowerCase();
-            if(!email || !email.includes('@')) return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
+            const username = document.getElementById('authUsername').value.trim();
+            if(!username) return alert("කරුණාකර වලංගු Username එකක් ඇතුළත් කරන්න!");
 
-            activeEmail = email;
-            localStorage.setItem('squad_cloud_user', activeEmail);
-            document.getElementById('userDisplayBadg').innerText = activeEmail;
+            activeUsername = username;
+            localStorage.setItem('squad_cloud_user', activeUsername);
+            document.getElementById('userDisplayBadg').innerText = activeUsername;
             
-            let safeDocId = btoa(activeEmail).replace(/=/g, "");
+            let safeDocId = btoa(encodeURIComponent(activeUsername)).replace(/=/g, "");
             let userDocRef = db.collection('cloud_users').doc(safeDocId);
             
             userDocRef.get().then(doc => {
                 if(!doc.exists) {
                     userDocRef.set(userData).then(() => {
                         showDashboard();
-                        loadDataFromCloud(activeEmail);
+                        loadDataFromCloud(activeUsername);
                     });
                 } else {
                     showDashboard();
-                    loadDataFromCloud(activeEmail);
+                    loadDataFromCloud(activeUsername);
                 }
             }).catch(err => alert("Error connecting: " + err.message));
         }
@@ -527,13 +527,13 @@
             stopTimerSystem();
             if(unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
             localStorage.removeItem('squad_cloud_user');
-            activeEmail = "";
-            document.getElementById('authEmail').value = "";
+            activeUsername = "";
+            document.getElementById('authUsername').value = "";
             showAuthScreen();
         }
 
-        function loadDataFromCloud(email) {
-            let safeDocId = btoa(email).replace(/=/g, "");
+        function loadDataFromCloud(username) {
+            let safeDocId = btoa(encodeURIComponent(username)).replace(/=/g, "");
             if(unsubscribeSnapshot) unsubscribeSnapshot();
             
             unsubscribeSnapshot = db.collection('cloud_users').doc(safeDocId).onSnapshot(doc => {
@@ -547,14 +547,6 @@
                     let activeWeekKey = "week_" + getSyllabusWeekNumber();
                     if (!userData.weeksData[activeWeekKey]) {
                         userData.weeksData[activeWeekKey] = incomingData.weeklyMinutes || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
-                        
-                        if(userData.history && Object.values(userData.weeksData[activeWeekKey]).reduce((a,b)=>a+b, 0) === 0) {
-                            userData.history.forEach(item => {
-                                if (item.type === "Focus") {
-                                    userData.weeksData[activeWeekKey].wed = (userData.weeksData[activeWeekKey].wed || 0) + 25;
-                                }
-                            });
-                        }
                     }
                     updateUI();
                 }
@@ -562,8 +554,8 @@
         }
 
         function saveDataToCloud() {
-            if(activeEmail) {
-                let safeDocId = btoa(activeEmail).replace(/=/g, "");
+            if(activeUsername) {
+                let safeDocId = btoa(encodeURIComponent(activeUsername)).replace(/=/g, "");
                 db.collection('cloud_users').doc(safeDocId).set(userData).catch(err => console.log(err));
             }
         }
@@ -706,7 +698,7 @@
                 listContainer.innerHTML = `<li style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding-top: 5px;">තවම Projects කර නැත.</li>`;
             } else {
                 listContainer.innerHTML = userData.history.map(item => {
-                    let badgeColor = item.type === "Focus" ? "var(--accent-pink)" : "var(--accent-purple)";
+                    let badgeColor = item.type === "Focus" ? "var(--accent-neon)" : "var(--accent-orange)";
                     return `<li class="history-item"><span><b style="color:${badgeColor}">[${item.type}]</b> ${item.task}</span><span>${item.time}</span></li>`;
                 }).join('');
             }
