@@ -45,6 +45,7 @@
             z-index: 0;
         }
 
+        /* 🦁 ඔයාගේ Squad Logo එකේ ස්ටයිල් එක */
         .logo-img {
             width: 85px;
             height: 85px;
@@ -87,7 +88,6 @@
             display: none;
         }
 
-        /* Tabs Styling */
         .tabs-navigation {
             display: flex;
             background: rgba(0, 0, 0, 0.3);
@@ -157,7 +157,7 @@
         .ai-response { background: rgba(139, 233, 253, 0.04); border-left: 3px solid var(--accent-teal); padding: 12px; border-radius: 0 12px 12px 0; text-align: left; margin-top: 15px; display: none; font-size: 0.85em; }
         .inline-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 
-        /* Weekly Timeline Chart Styles */
+        /* Timeline Chart Styles */
         .chart-container {
             background: rgba(0,0,0,0.3);
             border-radius: 16px;
@@ -193,7 +193,7 @@
         .chart-bar-fill {
             background: linear-gradient(360deg, var(--accent-purple), var(--accent-teal));
             width: 100%;
-            height: 0%; /* Dynamic fill */
+            height: 0%; 
             transition: height 0.6s ease;
             border-radius: 6px;
         }
@@ -205,10 +205,11 @@
             text-transform: uppercase;
         }
         .chart-hours-label {
-            font-size: 0.7em;
+            font-size: 0.65em;
             font-weight: bold;
             color: #fff;
             margin-bottom: 2px;
+            white-space: nowrap;
         }
 
         .history-box { background: rgba(0, 0, 0, 0.2); border-radius: 14px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
@@ -223,7 +224,7 @@
 <body>
 
     <div class="auth-screen-container" id="authScreen">
-        <img src="https://telegra.ph/file/bc0bf4ee79f82d3ca4628.jpg" alt="Squad Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
+        <img src="https://telegra.ph/file/a6536348-161f-4e8d-8687-7229db78000c.png" alt="AL Science Squad Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
         
@@ -243,7 +244,7 @@
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
-        <img src="https://telegra.ph/file/bc0bf4ee79f82d3ca4628.jpg" alt="Squad Logo" class="logo-img" style="width:65px; height:65px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
+        <img src="https://telegra.ph/file/a6536348-161f-4e8d-8687-7229db78000c.png" alt="AL Science Squad Logo" class="logo-img" style="width:65px; height:65px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
         <h1>AI Premium Focus</h1>
         <div class="squad-tag" style="margin-bottom:12px;">AL Science Squad 2028</div>
 
@@ -300,40 +301,40 @@
         <div id="chartsTabContent" class="tab-content">
             
             <div class="chart-container">
-                <div style="font-size:0.85em; text-align:left; font-weight:bold; color:var(--accent-teal); margin-bottom:5px;">📅 Weekly Study Timeline (Hours)</div>
+                <div style="font-size:0.85em; text-align:left; font-weight:bold; color:var(--accent-teal); margin-bottom:5px;">📅 Weekly Study Timeline (Minutes)</div>
                 <div class="chart-days-grid">
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-mon-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-mon-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-mon"></div></div>
                         <div class="chart-day-label">Mon</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-tue-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-tue-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-tue"></div></div>
                         <div class="chart-day-label">Tue</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-wed-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-wed-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-wed"></div></div>
                         <div class="chart-day-label">Wed</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-thu-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-thu-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-thu"></div></div>
                         <div class="chart-day-label">Thu</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-fri-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-fri-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-fri"></div></div>
                         <div class="chart-day-label">Fri</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-sat-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-sat-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-sat"></div></div>
                         <div class="chart-day-label">Sat</div>
                     </div>
                     <div class="chart-column">
-                        <div class="chart-hours-label" id="bar-sun-lbl">0h</div>
+                        <div class="chart-hours-label" id="bar-sun-lbl">0m</div>
                         <div class="chart-bar-wrapper"><div class="chart-bar-fill" id="bar-sun"></div></div>
                         <div class="chart-day-label">Sun</div>
                     </div>
@@ -366,12 +367,12 @@
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeEmail = "";
         
-        // ඩේටාබේස් එකට අලුතෙන් සතියේ දවස් 7 ටැබ් එක සඳහා එක් කරා
+        // මිනිත්තු සේව් කරගන්න ඩේටා ස්ට්‍රක්චර් එක අප්ඩේට් කලා
         let userData = { 
             points: 0, 
             sessions: 0, 
             history: [],
-            weeklyHours: { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 }
+            weeklyMinutes: { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 }
         };
         
         let unsubscribeSnapshot = null;
@@ -406,7 +407,6 @@
             }
         });
 
-        // Tab Switching Logic
         function switchTab(tabName) {
             document.getElementById('timerTabContent').classList.toggle('active', tabName === 'timer');
             document.getElementById('chartsTabContent').classList.toggle('active', tabName === 'charts');
@@ -474,7 +474,7 @@
                     userData.points = incomingData.points || 0;
                     userData.sessions = incomingData.sessions || 0;
                     userData.history = incomingData.history || [];
-                    userData.weeklyHours = incomingData.weeklyHours || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
+                    userData.weeklyMinutes = incomingData.weeklyMinutes || incomingData.weeklyHours || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
                     updateUI();
                 }
             }, err => console.log(err));
@@ -596,12 +596,11 @@
                 userData.points += earnedPoints;
                 userData.sessions += 1;
                 
-                // Timeline එකට පැය ගණන් එකතු කිරීමේ Logic එක
-                let hoursWorked = totalMinutesAllocated / 60;
+                // ⏱️ කෙලින්ම විනාඩි ගණන සේව් කරන Logic එක
                 let dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
                 let currentDayName = dayNames[now.getDay()];
                 
-                userData.weeklyHours[currentDayName] = (userData.weeklyHours[currentDayName] || 0) + hoursWorked;
+                userData.weeklyMinutes[currentDayName] = (userData.weeklyMinutes[currentDayName] || 0) + totalMinutesAllocated;
 
                 userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
                 alert(`🎉 Project එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
@@ -614,22 +613,22 @@
             saveDataToCloud();
         }
 
-        // Timeline Timeline Chart එක Render කිරීමේ ප්‍රධාන function එක
+        // 📊 විනාඩි ගණන් අනුව Chart එක පෙන්වන Function එක
         function renderWeeklyChart() {
             const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-            let maxHours = 0;
+            let maxMinutes = 0;
             
-            // උපරිම පැය ගණන සෙවීම (Chart Scale එක හදාගන්න)
             keys.forEach(day => {
-                if(userData.weeklyHours[day] > maxHours) maxHours = userData.weeklyHours[day];
+                if(userData.weeklyMinutes[day] > maxMinutes) maxMinutes = userData.weeklyMinutes[day];
             });
-            if(maxHours < 2) maxHours = 2; // Default scale height
+            if(maxMinutes < 30) maxMinutes = 30; // Default Scale Height
 
             keys.forEach(day => {
-                let hrs = userData.weeklyHours[day] || 0;
-                document.getElementById(`bar-${day}-lbl`).innerText = hrs === 0 ? "0h" : hrs.toFixed(1) + "h";
+                let mins = userData.weeklyMinutes[day] || 0;
+                // Chart එක උඩ අගය විනාඩි වලින් පෙන්වීම
+                document.getElementById(`bar-${day}-lbl`).innerText = mins + "m";
                 
-                let pct = (hrs / maxHours) * 100;
+                let pct = (mins / maxMinutes) * 100;
                 document.getElementById(`bar-${day}`).style.height = Math.max(5, pct) + "%";
             });
         }
