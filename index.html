@@ -45,15 +45,29 @@
             z-index: 0;
         }
 
-        /* 🦁 ඔයාගේ Squad Logo එකේ ස්ටයිල් එක */
-        .logo-img {
-            width: 85px;
-            height: 85px;
+        /* 🦁 Squad Logo CSS */
+        .logo-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .logo-svg {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #24A1DE, #bd93f9);
             border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent-purple);
-            box-shadow: 0 0 15px rgba(189, 147, 249, 0.5);
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(139, 233, 253, 0.4);
+            border: 2px solid var(--accent-teal);
+        }
+        .logo-text-inner {
+            font-size: 11px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .auth-screen-container {
@@ -129,12 +143,14 @@
             background: #24A1DE;
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-size: 0.85em;
             font-weight: bold;
+            margin-top: 10px;
             margin-bottom: 15px;
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.4);
         }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -214,7 +230,7 @@
 
         .history-box { background: rgba(0, 0, 0, 0.2); border-radius: 14px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); text-align: left; }
         .history-title { font-size: 0.85em; font-weight: bold; color: var(--accent-purple); margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
-        .history-list { max-height: 150px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .history-list { max-height: 180px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
         .history-item { font-size: 0.8em; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; color: #e2e8f0; }
 
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 12px; font-size: 0.8em; }
@@ -224,11 +240,11 @@
 <body>
 
     <div class="auth-screen-container" id="authScreen">
-        <img src="https://telegra.ph/file/a6536348-161f-4e8d-8687-7229db78000c.png" alt="AL Science Squad Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
+        <div class="logo-box">
+            <div class="logo-svg"><div class="logo-text-inner">AL<br>SCIENCE<br>SQUAD</div></div>
+        </div>
         <h2>Focus Space</h2>
         <div class="squad-tag">AL Science Squad 2028</div>
-        
-        <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Join Telegram Channel</a>
         
         <div style="text-align: left; margin-bottom: 20px;">
             <label style="font-size: 0.85em; color: #a4b5cf; margin-left: 2px;">Enter Email Address</label>
@@ -244,7 +260,9 @@
             <button class="logout-btn" onclick="executeLogout()">Logout</button>
         </div>
 
-        <img src="https://telegra.ph/file/a6536348-161f-4e8d-8687-7229db78000c.png" alt="AL Science Squad Logo" class="logo-img" style="width:65px; height:65px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972531.png'">
+        <div class="logo-box">
+            <div class="logo-svg" style="width:55px; height:55px;"><div class="logo-text-inner" style="font-size:8px;">AL<br>SQUAD</div></div>
+        </div>
         <h1>AI Premium Focus</h1>
         <div class="squad-tag" style="margin-bottom:12px;">AL Science Squad 2028</div>
 
@@ -296,6 +314,8 @@
                 <div style="font-weight: bold; color: var(--accent-teal); margin-bottom: 4px;">✨ AI Session Plan:</div>
                 <div id="aiSteps"></div>
             </div>
+            
+            <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Join Telegram Channel</a>
         </div>
 
         <div id="chartsTabContent" class="tab-content">
@@ -345,6 +365,8 @@
                 <div class="history-title">📊 Complete Project History:</div>
                 <ul class="history-list" id="historyList"></ul>
             </div>
+            
+            <a href="https://t.me/AL2028Everything" target="_blank" class="tg-link-btn">✈️ Visit Telegram Squad</a>
         </div>
 
     </div>
@@ -367,7 +389,6 @@
         let focusTime = 25 * 60, breakTime = 5 * 60, timeLeft = focusTime;
         let activeEmail = "";
         
-        // මිනිත්තු සේව් කරගන්න ඩේටා ස්ට්‍රක්චර් එක අප්ඩේට් කලා
         let userData = { 
             points: 0, 
             sessions: 0, 
@@ -383,19 +404,9 @@
             navigator.serviceWorker.register('sw.js')
             .then(reg => console.log('Service Worker Live!'))
             .catch(err => console.error('Service Worker Error:', err));
-            
-            navigator.serviceWorker.addEventListener('message', event => {
-                if (event.data && event.data.action === 'timerFinished') {
-                    handleTimerCompletion();
-                }
-            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-
             let savedUser = localStorage.getItem('squad_cloud_user');
             if(savedUser && savedUser.trim() !== "") {
                 activeEmail = savedUser.trim().toLowerCase();
@@ -412,10 +423,7 @@
             document.getElementById('chartsTabContent').classList.toggle('active', tabName === 'charts');
             document.getElementById('timerTabBtn').classList.toggle('active', tabName === 'timer');
             document.getElementById('chartsTabBtn').classList.toggle('active', tabName === 'charts');
-            
-            if(tabName === 'charts') {
-                renderWeeklyChart();
-            }
+            if(tabName === 'charts') renderWeeklyChart();
         }
 
         function checkEnterKey(event, type) {
@@ -428,12 +436,7 @@
 
         function executeCloudLogin() {
             const email = document.getElementById('authEmail').value.trim().toLowerCase();
-            if(!email || !email.includes('@')) {
-                return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
-            }
-            if ('Notification' in window && Notification.permission !== 'granted') {
-                Notification.requestPermission();
-            }
+            if(!email || !email.includes('@')) return alert("කරුණාකර නිවැරදි Email ලිපිනයක් ඇතුළත් කරන්න!");
 
             activeEmail = email;
             localStorage.setItem('squad_cloud_user', activeEmail);
@@ -474,7 +477,21 @@
                     userData.points = incomingData.points || 0;
                     userData.sessions = incomingData.sessions || 0;
                     userData.history = incomingData.history || [];
-                    userData.weeklyMinutes = incomingData.weeklyMinutes || incomingData.weeklyHours || { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
+                    
+                    // 💡 කලින් කරපු වැඩ වල මිනිත්තු ටික Chart එකට Auto-Calculate කරලා ගන්න සුපිරි Logic එකක් හැදුවා!
+                    if (incomingData.weeklyMinutes) {
+                        userData.weeklyMinutes = incomingData.weeklyMinutes;
+                    } else {
+                        // පරණ ඩේටා තිබ්බොත් ඒ ටික චාර්ට් එකට දාගන්නවා
+                        userData.weeklyMinutes = { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
+                        if (userData.history) {
+                            userData.history.forEach(item => {
+                                if (item.type === "Focus") {
+                                    userData.weeklyMinutes.wed = (userData.weeklyMinutes.wed || 0) + 25; // Default allocation for past sessions
+                                }
+                            });
+                        }
+                    }
                     updateUI();
                 }
             }, err => console.log(err));
@@ -499,21 +516,14 @@
 
         function updateCustomTimes() {
             if(isRunning) return;
-
             let focusInputVal = parseInt(document.getElementById('customFocus').value);
             if (isNaN(focusInputVal) || focusInputVal < 10) {
                 alert("⚠️ Focus Session එකක් අඩුම විනාඩි 10ක්වත් තිබිය යුතුය!");
                 document.getElementById('customFocus').value = 10;
                 focusInputVal = 10;
             }
-
             focusTime = focusInputVal * 60;
             breakTime = parseInt(document.getElementById('customBreak').value) * 60;
-            if (isNaN(breakTime) || breakTime < 1) {
-                document.getElementById('customBreak').value = 1;
-                breakTime = 60;
-            }
-
             timeLeft = (currentMode === 'focus') ? focusTime : breakTime;
             displayTime();
         }
@@ -540,28 +550,13 @@
                 stopTimerSystem();
                 btn.innerText = "Resume";
             } else {
-                if (currentMode === 'focus' && (focusTime / 60) < 10) {
-                    focusTime = 10 * 60;
-                    timeLeft = focusTime;
-                    document.getElementById('customFocus').value = 10;
-                }
-
                 isRunning = true;
                 btn.innerText = "Pause";
                 expectedEndTime = Date.now() + (timeLeft * 1000);
                 
-                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({
-                        action: 'startTimer',
-                        duration: timeLeft,
-                        mode: currentMode
-                    });
-                }
-
                 localTimerInterval = setInterval(() => {
                     let remainingMs = expectedEndTime - Date.now();
                     timeLeft = Math.ceil(remainingMs / 1000);
-                    
                     if (timeLeft <= 0) {
                         handleTimerCompletion();
                     } else {
@@ -574,9 +569,6 @@
         function stopTimerSystem() {
             isRunning = false;
             if(localTimerInterval) clearInterval(localTimerInterval);
-            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({ action: 'cancelTimer' });
-            }
         }
 
         function handleTimerCompletion() {
@@ -586,34 +578,31 @@
         }
 
         function sessionCompleted() {
-            let currentTask = document.getElementById('taskTopic').value.trim() || "General Study Project";
+            let currentTask = document.getElementById('taskTopic').value.trim() || "General Study";
             let now = new Date();
             let timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
             if (currentMode === 'focus') {
                 let totalMinutesAllocated = Math.floor(focusTime / 60);
-                let earnedPoints = totalMinutesAllocated; 
-                userData.points += earnedPoints;
+                userData.points += totalMinutesAllocated;
                 userData.sessions += 1;
                 
-                // ⏱️ කෙලින්ම විනාඩි ගණන සේව් කරන Logic එක
+                // 🗓️ දවස අනුව විනාඩි එකතු වෙනවා
                 let dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
                 let currentDayName = dayNames[now.getDay()];
                 
                 userData.weeklyMinutes[currentDayName] = (userData.weeklyMinutes[currentDayName] || 0) + totalMinutesAllocated;
-
                 userData.history.unshift({ task: currentTask, type: "Focus", time: timeString });
-                alert(`🎉 Project එක සාර්ථකයි! වැඩ කල විනාඩි ${totalMinutesAllocated} ට +${earnedPoints} Points එකතු වුණා!`);
+                
+                alert(`🎉 සාර්ථකයි! විනාඩි ${totalMinutesAllocated} ක් Chart එකට එකතු වුණා.`);
                 setMode('break');
             } else {
                 userData.history.unshift({ task: "Short Break", type: "Break", time: timeString });
-                alert("🥤 විවේකය අවසන්! නැවත වැඩ පටන් ගමු.");
                 setMode('focus');
             }
             saveDataToCloud();
         }
 
-        // 📊 විනාඩි ගණන් අනුව Chart එක පෙන්වන Function එක
         function renderWeeklyChart() {
             const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
             let maxMinutes = 0;
@@ -621,13 +610,11 @@
             keys.forEach(day => {
                 if(userData.weeklyMinutes[day] > maxMinutes) maxMinutes = userData.weeklyMinutes[day];
             });
-            if(maxMinutes < 30) maxMinutes = 30; // Default Scale Height
+            if(maxMinutes < 30) maxMinutes = 30; 
 
             keys.forEach(day => {
                 let mins = userData.weeklyMinutes[day] || 0;
-                // Chart එක උඩ අගය විනාඩි වලින් පෙන්වීම
                 document.getElementById(`bar-${day}-lbl`).innerText = mins + "m";
-                
                 let pct = (mins / maxMinutes) * 100;
                 document.getElementById(`bar-${day}`).style.height = Math.max(5, pct) + "%";
             });
